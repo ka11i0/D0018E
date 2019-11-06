@@ -8,9 +8,6 @@ ul{
 	margin: 0;
 	padding: 0;
 }
-li{
-	float: left;
-}
 li a{
 	display: block;
 	text-align: center;
@@ -22,4 +19,10 @@ a, a:visited, a:link{
 }
 a:hover{
 	background-color: #86B3A5;
+}
+a.left{
+	float: left;
+}
+a.right{
+	float: right;
 }
