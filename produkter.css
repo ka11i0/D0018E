@@ -20,6 +20,9 @@ a, a:visited, a:link{
 a:hover{
 	background-color: #86B3A5;
 }
+a:active {
+	text-decoration: underline;
+}
 a.left{
 	float: left;
 }
