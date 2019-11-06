@@ -26,3 +26,6 @@ a.left{
 a.right{
 	float: right;
 }
+#prodList{
+	clear: both;
+}
