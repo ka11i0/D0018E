@@ -1,0 +1,46 @@
+body{
+	background-color: #DAFFF4;
+	font-family: calibri;
+
+}
+/* setup outer ring of icon */
+#icon{
+	background-color: #B38174;
+
+	box-shadow: 5px 5px 5px;
+
+	border-radius: 475px;
+	width: 475px;
+	height: 475px;
+	margin: auto;
+
+
+	text-align: center;
+	font-size: 50px;
+
+}
+/* setup inner ring of icon */
+#iconCenter{
+	background-color: #86B3A5;
+
+	border-radius: 350px;
+	width: 350px;
+	height: 350px;
+	margin: auto;
+}
+
+/* no underline on links, and color is inherited from parent element */
+a, a:visited, a:link{
+	text-decoration: none;
+	color: inherit;
+}
+/* yellow/gold color on link hover*/
+a:hover#redirectLink{
+	text-shadow:0 0 5px #F9FF02, 0 0 10px #E2E602, 0 0 15px #BCBF02;
+}
+
+
+
+
+
+

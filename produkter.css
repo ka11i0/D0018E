@@ -1,0 +1,25 @@
+body{
+	background-color: #DAFFF4;
+	font-family: calibri;
+	margin: 0px;
+}
+ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+li{
+	float: left;
+}
+li a{
+	display: block;
+	text-align: center;
+	padding: 20px 30px;
+}
+a, a:visited, a:link{
+	text-decoration: none;
+	color: inherit;
+}
+a:hover{
+	background-color: #86B3A5;
+}
