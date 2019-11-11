@@ -55,11 +55,13 @@
 			  <label>
 				<input type="checkbox" checked="checked" name="remember"> Kom ihåg användarnamn
 			  </label>
+			  <div>
+			  		<span style="float:left"> <a href="nyttkonto.php">Skapa nytt konto</a></span>
+                    <span style="float:right"> <a href="#">Glömt lösenord?</a></span>
+              </div>
 			</div>
 		  
-			<div class="container" style="background-color:#f1f1f1">
-			  <span class="psw"> <a href="#">Glömt lösenord?</a></span>
-			</div>
+			
 		</div>
 	</body>
 </html>
