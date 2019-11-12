@@ -18,7 +18,7 @@ function CloseCon($conn) //tar bort connection ur objectet
  $conn -> close();
  }
 
-function DB_Check($sql_query)  //kollar om något attribut som efterfrågas finns i databsen
+function DB_Check($sql_query) { //kollar om något attribut som efterfrågas finns i databsen
 
 }
 function DB_insertProduct() //kunna skapa en ny produkt i databasen som admin
