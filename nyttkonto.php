@@ -3,6 +3,7 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="produkter.css">
 	<link rel="stylesheet" type="text/css" href="login.css">
+	<link rel="stylesheet" type="text/css" href="registrera.css">
 </head>
 	<body>
 		<nav id="navigation">
