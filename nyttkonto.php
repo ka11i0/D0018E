@@ -20,37 +20,44 @@
 		<form action="#" method="post">
 		  
 			<div class="container">
-			  <label for="uname"><b>Användarnamn</b></label>
-			  <input type="text" placeholder="Välj ett användarnamn" name="uname" required>
-		  
-			  <label for="psw"><b>Lösenord</b></label>
-			  <input type="password" placeholder="Välj ett användarnamn" name="psw" required>
-              
-              <label for="email"><b>Email</b></label>
-              <input type="email" placeholder="Fyll i din email" name="mail" required>
+                <label for="uname"><b>Användarnamn*</b></label>
+                <input type="text" placeholder="Välj ett användarnamn" name="uname" required>
+            
+                <label for="psw"><b>Lösenord*</b></label>
+                <input type="password" placeholder="Välj ett användarnamn" name="psw" required>
+                
+                <label for="email"><b>Email*</b></label>
+                <input type="email" placeholder="Fyll i din email" name="mail" required>
 
-              <label for="date"><b>Födelsedatum</b></label>
-              <input type="date" placeholder="Fyll i ditt födelsedatum [ååddmm]" name="date" required>
+                <div id="uppg">
+                <label for="date"><b>Födelsedatum*</b></label>
+                <input type="date" name="date" required>
+                </div>
 
-              <label for="town"><b>Stad</b></label>
-              <input type="text" placeholder="">
+                <div id="uppg">
+                <label for="town"><b>Stad</b></label>
+                <input type="text" placeholder="">
+                </div>
 
-              <label for="post"><b>Postnummer</b></label>
-              <input type="number" placeholder="">
+                <div id="uppg">
+                <label for="post"><b>Postnummer</b></label>
+                <input type="number" placeholder="">
+                </div>
 
-              <label for="addr"><b>Address</b></label>
-              <input type="text" placeholder="">
 
-              <label for="tel"><b>Telefonnummer</b></label>
-              <input type="telnum" placeholder="">
+                <div id="uppg">
+                <label for="addr"><b>Address</b></label>
+                <input type="text" placeholder="">
+                </div>
 
-              
-              
-			  <button type="submit">Registrera</button>
-              <div id="glömtlösen">
-                    <span style="float:right"> <a href="#">Glömt lösenord?</a></span>
-                    <span class="psw"> <a href="#">Skapa nytt konto</a></span>
-              </div>
+
+                <div id="uppg">
+                <label for="tel"><b>Telefonnummer</b></label>
+                <input type="telnum" placeholder="">
+                </div>
+                
+                
+                <button type="submit">Registrera</button>
 			</div>
 		  
 			
