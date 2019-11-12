@@ -31,4 +31,7 @@ button:hover {
 .container {
   padding: 16px;
 }
+a#reg{
+  float: right;
+}
 
