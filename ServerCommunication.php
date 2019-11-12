@@ -1,28 +1,31 @@
 <?php
-//inkludera denna i filen som ska kommunicera med server
-function OpenCon()
+
+//inkludera denna fil i filen som ska kommunicera med server för alla kommandon med server.
+
+
+function OpenCon() //retunerar ett connection objekt till servern
  {
- $dbhost = "127.0.0.1"; //url
+ $dbhost = "127.0.0.1"; 
  $dbuser = "960224";
  $dbpass = "apa";
- $db = "db960224"; //kolla upp
+ $db = "db960224"; //zerosdb
  $conn = new mysqli($dbhost, $dbuser, $dbpass,$db);
  return $conn;
 }
 
- 
-function CloseCon($conn)
+function CloseCon($conn) //tar bort connection ur objectet
  {
  $conn -> close();
  }
 
-function InsertDatabase($sql_query)
-{if ($conn->query($sql_query) === TRUE)  {
-    echo "New record created successfully";
-} else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-}
-}
-//create query and send to function kanske ha type of operation som parameter för mer logik ifall det behövs eller ha separata funktioner för olika operationer som update,search,delete o insertion.
+function DB_Check($sql_query)  //kollar om något attribut som efterfrågas finns i databsen
 
+}
+function DB_insertProduct() //kunna skapa en ny produkt i databasen som admin
+{
+
+}
+function DB_update() //både users och produkter samt historik ska kunna uppdateras 
+{
+}
 
