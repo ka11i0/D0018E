@@ -1,0 +1,33 @@
+<?php
+session_start(); 
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="produkter.css">
+	<link rel="stylesheet" type="text/css" href="login.css">
+</head>
+	<body>
+		<nav id="navigation">
+			<ul>
+				<li><a href="produkter.html" class="left">Butik</a></li>
+				<li><a href="custom.html" class="left">Custom Snus</a></li>
+				<li><a href="support.html" class="left">Support</a></li>
+				<li><a href="om.html" class="left">Om oss</a></li>
+				<li><a href="varukorg.html" class="right">Varukorg</a></li>
+				<li><a href="login.php" class="right"><u>
+				<?php 
+					if (session_status()==PHP_SESSION_ACTIVE) {
+						print_r($_SESSION["user"]);
+						//echo "string";
+					}
+					else{
+						echo "Logga in/Registrera";	
+					}
+				?>
+			</u></a></li>
+			</ul>
+		</nav>
+	</body>
+</html>

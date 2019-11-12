@@ -1,8 +1,12 @@
+<?php
+session_start(); 
+?>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="produkter.css">
+    <link rel="stylesheet" type="text/css" href="produkter.css">
+    <link rel="stylesheet" type="text/css" href="support.css">
 </head>
 	<body>
 		<nav id="navigation">
@@ -12,7 +16,17 @@
 				<li><a href="support.html" class="left">Support</a></li>
 				<li><a href="om.html" class="left">Om oss</a></li>
 				<li><a href="varukorg.html" class="right">Varukorg</a></li>
-				<li><a href="login.html" class="right">Logga in/Registrera</a></li>
+				<li><a href="login.php" class="right"><u>
+				<?php 
+					if (session_status()==PHP_SESSION_ACTIVE) {
+						print_r($_SESSION["user"]);
+						//echo "string";
+					}
+					else{
+						echo "Logga in/Registrera";	
+					}
+				?>
+			</u></a></li>
 			</ul>
 		</nav>
 	</body>
