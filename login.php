@@ -8,12 +8,14 @@
 		$psw=$_POST['psw'];
 	 	$p=OpenCon(); // skapar ett connection objekt p
 	 	$sql_query ="SELECT Namn,Lösenord FROM `konto` WHERE Namn='{$uname}' AND Lösenord='{$psw}'";
+
+	 	
 	 	$result = $p->query($sql_query); 
 	 	if ($result->num_rows > 0) //vi har dock bara en rad 
 	 	{ //användaren finns ifall vilkoret är sant
 	 		$row = $result->fetch_assoc();
 	 		$_SESSION["user"]=$row["Namn"];
-	 		header('Location: login.php'); //redirect page after logged in skicka variabler för att vissa att personen är inloggad
+	 		header('Location: produkter.php'); //redirect page after logged in skicka variabler för att vissa att personen är inloggad
 	 		
 	    }
  	else 
