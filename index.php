@@ -13,7 +13,7 @@ session_start();
 		<div id="icon">
 			<div id="title">SnusExperten</div>
 			<div id="iconCenter"></div>
-			<a href="produkter.html" id="redirectLink">Butik</a>
+			<a href="produkter.php" id="redirectLink">Butik</a>
 		</div>
 	</body>
 
