@@ -1,6 +1,7 @@
 
 <?php
-	include 'ServerCommunication.php'  ; 
+
+	include 'ServerCommunication.php'; 
 	session_start();
     if(isset($_POST['uname']) and isset($_POST['psw'])) //isset() checks if variable exists != null
 	{ 
@@ -12,9 +13,9 @@
 	 	if ($result->num_rows > 0) //vi har dock bara en rad 
 	 	{ //användaren finns ifall vilkoret är sant
 	 		$row = $result->fetch_assoc();
-	 		$_SESSION["user"]=$uname;
+	 		$_SESSION["user"]=$row["Namn"];
 	 		header('Location: login.php'); //redirect page after logged in skicka variabler för att vissa att personen är inloggad
-	 		exit();
+	 		
 	    }
  	else 
 	 	{
@@ -41,9 +42,16 @@
 				<li><a href="support.php" class="left">Support</a></li>
 				<li><a href="om.php" class="left">Om oss</a></li>
 				<li><a href="varukorg.php" class="right">Varukorg</a></li>
-				<li><a href="login.php" class="right"><u>
+				<li><a 	
 				<?php 
-					if (session_status()==PHP_SESSION_ACTIVE) {
+				if (isset($_SESSION["user"])) 
+				{ print "href=logout.php";}
+				else
+				{print "href=login.php";} 
+				?> 
+				class="right"><u>
+				<?php 
+					if (isset($_SESSION["user"])) {
 						print_r($_SESSION["user"]);
 						//echo "string";
 					}
@@ -58,7 +66,7 @@
 		  
 			<div class="container">
 			  <label for="uname"><b>Användarnamn</b></label>
-			  <input type="text" placeholder="Skriv ditt nvändarnamn" name="uname" required>
+			  <input type="text" placeholder="Skriv ditt användarnamn" name="uname" required>
 		  
 			  <label for="psw"><b>Lösenord</b></label>
 			  <input type="password" placeholder="Skriv ditt lösenord" name="psw" required>
