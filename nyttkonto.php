@@ -4,7 +4,7 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="produkter.css">
 	<link rel="stylesheet" type="text/css" href="login.css">
-	<link rel="stylesheet" type="text/css" href="registrera.css">
+	<link rel="stylesheet" type="text/css" href="nyttkonto.css">
 </head>
 	<body>
         <?php include_once 'navbar.php'; ?>
