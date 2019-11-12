@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,16 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="registrera.css">
 </head>
 	<body>
-		<nav id="navigation">
-			<ul>
-				<li><a href="produkter.html" class="left">Butik</a></li>
-				<li><a href="custom.html" class="left">Custom Snus</a></li>
-				<li><a href="support.html" class="left">Support</a></li>
-				<li><a href="om.html" class="left">Om oss</a></li>
-				<li><a href="varukorg.html" class="right">Varukorg</a></li>
-				<li><a href="login.php" class="right"><u>Logga in/Registrera</u></a></li>
-			</ul>
-        </nav>
+        <?php include_once 'navbar.php'; ?>
         
 		<form action="#" method="post">
 		  
