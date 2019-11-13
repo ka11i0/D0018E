@@ -2,28 +2,33 @@
 <?php
 	include 'ServerCommunication.php'; 
 	session_start();
+	LoginCheck();
+	
+	$sql_query ="SELECT Namn,Lösenord FROM `konto` WHERE Namn='{$uname}' AND Lösenord='{$psw}'";
+
+	func LoginCheck($sql_query)
+	{
 	if(isset($_POST['uname']) and isset($_POST['psw'])) //isset() checks if variable exists != null
 	{ 
 		$uname=$_POST['uname'];
 		$psw=$_POST['psw'];
 	 	$p=OpenCon(); // skapar ett connection objekt p
-	 	$sql_query ="SELECT Namn,Lösenord FROM `konto` WHERE Namn='{$uname}' AND Lösenord='{$psw}'";
 
 	 	
 	 	$result = $p->query($sql_query); 
 	 	if ($result->num_rows > 0) //vi har dock bara en rad 
 	 	{ //användaren finns ifall vilkoret är sant
-	 		$row = $result->fetch_assoc();
+	 		$row = $result->fetch_assoc(); 
 	 		$_SESSION["user"]=$row["Namn"];
-	 		header('Location: produkter.php'); //redirect page after logged in skicka variabler för att vissa att personen är inloggad
-	 		
+	 		header('Location: produkter.php'); 
 	    }
  	else 
 	 	{
 	 		echo "Användaren eller Lösenordet är fel!";
 	 	}
  	CloseCon($p);
- }
+    }
+    }
 
  
 
