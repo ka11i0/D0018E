@@ -1,4 +1,33 @@
-<?php session_start(); ?>
+<?
+php session_start(); 
+$info = array("uname", "psw", "email", "date", "town", "country");
+$msg = ""
+$p=OpenCon(); // skapar ett connection objekt p
+
+
+function CheckIfTaken() //kollar med databasen ifall det info du fyller i är taget
+{
+for($x = 0; $x < $count(info); $x++) 
+{
+  if(isset($_POST[$info[$x]])) 
+  { 
+	 $sql_query ="SELECT $info[$x] FROM 'konto' WHERE Namn='{$_POST[$info[$x]]}'" ;
+	 $result = $p->query($sql_query); 
+		 if ($result->num_rows > 0)
+		 {
+		 	$msg .="{$info[$x]} ";
+		 }
+  }
+}
+if(msg!="")
+{
+	echo "Ditt .{$msg}. är upptaget välj något annant"  
+	//refresha sidan och behåll info som var ok att använda
+}
+}
+
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +38,7 @@
 	<body>
         <?php include_once 'navbar.php'; ?>
         
-		<form action="#" method="post">
+		<form action="<?php $_PHP_SELF ?>" method="post">
 		  
 			<div class="container">
                 <label for="uname"><b>Användarnamn*</b></label>
