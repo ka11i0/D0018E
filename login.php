@@ -2,20 +2,28 @@
 <?php
 	include 'ServerCommunication.php'; 
 	session_start();
-	LoginCheck();
 	
-	$sql_query ="SELECT Namn,Lösenord FROM `konto` WHERE Namn='{$uname}' AND Lösenord='{$psw}'";
 
-	func LoginCheck($sql_query)
+	function CheckPOST($info)
 	{
-	if(isset($_POST['uname']) and isset($_POST['psw'])) //isset() checks if variable exists != null
-	{ 
-		$uname=$_POST['uname'];
-		$psw=$_POST['psw'];
-	 	$p=OpenCon(); // skapar ett connection objekt p
-
-	 	
-	 	$result = $p->query($sql_query); 
+	$counter=0;
+	for($x = 0; $x < count($info); $x++) {
+ 	 if(isset($_POST[$info[$x]])) 
+  		{ 
+		$counter++;
+		//$info[$x] = $_POST[$info[$x]];
+    	}
+	}	
+	if($counter==count($info)){
+	return true;
+	}
+	return false;
+	}
+	
+	
+	function UserCheck($sql_query1,$currentconnection)
+	{
+	 	$result = $currentconnection->query($sql_query1); 
 	 	if ($result->num_rows > 0) //vi har dock bara en rad 
 	 	{ //användaren finns ifall vilkoret är sant
 	 		$row = $result->fetch_assoc(); 
@@ -26,12 +34,19 @@
 	 	{
 	 		echo "Användaren eller Lösenordet är fel!";
 	 	}
- 	CloseCon($p);
+ 	
     }
+  	$info = array('uname','psw');
+    if(CheckPOST($info)){
+		$psw = $_POST['psw']; //ta bort
+		$uname = $_POST['uname'];
+    	$sql_query1 ="SELECT Namn,Lösenord FROM `konto` WHERE 
+		Namn='{$uname}' AND Lösenord='{$psw}'";
+    	$p=OpenCon(); // skapar ett connection objekt
+    	UserCheck($sql_query1,$p);
+    	CloseCon($p);
     }
-
- 
-
+    
 ?>
 <!DOCTYPE html>
 <html>
