@@ -1,37 +1,32 @@
-<?
-php session_start(); 
-$info = array("uname", "psw", "email", "date", "town", "country");
-$p=OpenCon(); // skapar ett connection objekt p
-$sql_query ="SELECT $info[$x] FROM 'konto' WHERE Namn='{$_POST[$info[$x]]}'" ;
-CheckIfTaken($sql_query,$p);
+<?php 
+session_start(); 
+include 'ServerCommunication.php'; 
 
 
-function CheckIfTaken($sql_query,$currentconnection) //kollar med databasen ifall det info du fyller i är taget
+
+
+
+function CheckIfTaken($currentconnection,$info) //kollar med databasen ifall det info du fyller i är taget
 {
 $msg = ""
 for($x = 0; $x < $count(info); $x++) 
 {
-  if(isset($_POST[$info[$x]])) 
-  { 
-	 $result = $currentconnection->query($sql_query); 
-		 if ($result->num_rows > 0)
-		 {
+	$sql_query ="SELECT $info[$x] FROM 'konto' WHERE Namn='{$_POST[$info[$x]]}'" ;
+ 	$userinfo=UserCheck($sql_query,$currentconnection);
+	if( != 0);
 		 	$msg .="{$info[$x]} ";
-		 }
-  }
 }
-if(msg!="")
+return $msg;
+}
+
+
+$info = array("uname", "psw", "email", "date", "town", "country");
+if(CheckPOST($info))
 {
-	echo "Ditt .{$msg}. är upptaget välj något annant"  
-	//refresha sidan och behåll info som var ok att använda
+ 	$p=OpenCon(); // skapar ett connection objekt p
+ 	$t=CheckIfTaken($p,$info)
+    CloseCon($p);
 }
-else {
-	//kalla på funktionen som uppdaterar lägger in värden i databasen
-}
-//mby CloseCon($p);
-}
-
-
 ?>
 <!DOCTYPE html>
 <html>

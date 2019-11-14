@@ -2,40 +2,21 @@
 <?php
 	include 'ServerCommunication.php'; 
 	session_start();
-	
-
-	function CheckPOST($info)
-	{
-	$counter=0;
-	for($x = 0; $x < count($info); $x++) {
- 	 if(isset($_POST[$info[$x]])) 
-  		{ 
-		$counter++;
-		//$info[$x] = $_POST[$info[$x]];
-    	}
-	}	
-	if($counter==count($info)){
-	return true;
-	}
-	return false;
-	}
-	
-	
-	function UserCheck($sql_query1,$currentconnection)
-	{
-	 	$result = $currentconnection->query($sql_query1); 
-	 	if ($result->num_rows > 0) //vi har dock bara en rad 
-	 	{ //användaren finns ifall vilkoret är sant
-	 		$row = $result->fetch_assoc(); 
-	 		$_SESSION["user"]=$row["Namn"];
+    function LoginStatus($sql_query1,$p)
+    {
+    	$s=UserCheck($sql_query1,$p); 
+    	if($s!=0)
+    	{
+	 		$_SESSION["user"]=$s["Namn"];
 	 		header('Location: produkter.php'); 
 	    }
- 	else 
+ 		else 
 	 	{
 	 		echo "Användaren eller Lösenordet är fel!";
 	 	}
- 	
     }
+
+//main 
   	$info = array('uname','psw');
     if(CheckPOST($info)){
 		$psw = $_POST['psw']; //ta bort
@@ -43,7 +24,7 @@
     	$sql_query1 ="SELECT Namn,Lösenord FROM `konto` WHERE 
 		Namn='{$uname}' AND Lösenord='{$psw}'";
     	$p=OpenCon(); // skapar ett connection objekt
-    	UserCheck($sql_query1,$p);
+   		LoginStatus($sql_query1,$p);
     	CloseCon($p);
     }
     
