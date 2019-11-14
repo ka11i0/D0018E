@@ -19,7 +19,6 @@ session_start();
 				<?php 
 					if (session_status()==PHP_SESSION_ACTIVE) {
 						print_r($_SESSION["user"]);
-						//echo "string";
 					}
 					else{
 						echo "Logga in/Registrera";	
