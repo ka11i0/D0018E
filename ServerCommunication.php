@@ -59,13 +59,13 @@ function CheckPOST($info)
 {
 	$counter=0;
 	for($x = 0; $x < count($info); $x++) 
-	{
- 	 if(isset($_POST[$info[$x]])) 
-  		{ 
-		$counter++;
-		//$info[$x] = $_POST[$info[$x]];
-    	}
-	}	
+		{
+	 		if(isset($_POST[$info[$x]])) 
+		  		{ 
+					$counter++;
+					//$info[$x] = $_POST[$info[$x]];
+		    	}
+		}	
 	if($counter==count($info))
 	{
 		return true;
