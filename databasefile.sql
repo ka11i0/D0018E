@@ -29,5 +29,12 @@ CREATE TABLE vaurkorg
 FOREIGN KEY(Konto_varu) REFERENCES konto(Person_ID),
 FOREIGN KEY(Produkt_varu) REFERENCES produkt(Produkt_ID)
 );
-INSERT INTO produkt( Produktnamn,Produkt_ID,Img_filsökväg,Pris,Saldo,Produktbeskrivning)
-VALUES('APSNUS',12,':C/något',420,69,'Smaskens')
+
+CREATE TABLE kommentarer
+			(Person_ID INT, 
+			Produkt_ID INT,
+			kommentar VARCHAR(100),
+			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID),
+			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID)
+);
+
