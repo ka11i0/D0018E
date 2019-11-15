@@ -42,8 +42,6 @@ CREATE TABLE kommentarer
 			Produkt_ID INT NOT NULL,
 			kommentar VARCHAR(100) NOT NULL,
 			Datum DATE NOT NULL,
-			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID),
-			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID)
-);
-FOREIGN KEY(Produkt_varu) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE
+			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE NULL,
+			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE
 );
