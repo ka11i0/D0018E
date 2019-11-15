@@ -23,8 +23,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     {
         //få id för nästa user
         $id = nextUserId($p);
-        $account = "INSERT INTO konto (Person_ID, Namn, Lösenord, Birthdate, 
-        Admin_privilege, EMAIL, Stad, Postnummer, Address, Telefonnummer) VALUES ('$id','$info[0]','$info[1]','$info[3]','0'
+        $account = "INSERT INTO konto (Person_ID, Namn, Lösenord, Födelsedag, 
+        privilegie, Mail, Stad, Postnummer, Address, Telefonnummer) VALUES ('$id','$info[0]','$info[1]','$info[3]','0'
         ,'$info[2]','$info[4]','$info[5]','$info[6]','$info[7]')";
         if ($p->query($account)) {
             echo "<script type='text/javascript'>alert('Användare skapad');</script>";
