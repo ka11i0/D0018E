@@ -48,9 +48,6 @@
 			  <input type="password" placeholder="Skriv ditt lösenord" name="psw" required>
 		  
 			  <button type="submit">Logga in</button>
-			  <label>
-				<input type="checkbox" checked="checked" name="remember"> Kom ihåg användarnamn
-			  </label>
 			  <div>
 			  		<span style="float:left"> <a href="nyttkonto.php">Skapa nytt konto</a></span>
                     <span style="float:right"> <a href="#">Glömt lösenord?</a></span>

@@ -5,12 +5,22 @@
         <li><a href="support.php" class="left">Support</a></li>
         <li><a href="om.php" class="left">Om oss</a></li>
         <li><a href="varukorg.php" class="right">Varukorg</a></li>
+
+        <?php <li><a
+            if (isset($_SESSION["user"])) 
+                { print "href=logout.php";}
+             class="right" >
+            if (isset($_SESSION["user"])) {
+                echo "Logga ut";
+            }
+        </a></li>?>
+
         <li><a <?php 
-        if (isset($_SESSION["user"])) 
-            {print "href=logout.php";}
-        else
-            {print "href=login.php";} 
-        ?> class="right"><u>
+            if (isset($_SESSION["user"])) 
+                {print "href=logout.php";}
+            else
+                {print "href=login.php";} 
+            ?> class="right">
         <?php 
             if (isset($_SESSION["user"])) {
                 print_r($_SESSION["user"]);
@@ -19,7 +29,6 @@
             else{
                 echo "Logga in/Registrera";	
             }
-        ?>
-    </u></a></li>
+        ?></a></li>
     </ul>
 </nav>
