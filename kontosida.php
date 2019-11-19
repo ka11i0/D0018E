@@ -1,4 +1,9 @@
-<?php session_start(); ?>
+<?php 
+    include 'ServerCommunication.php'; 
+    session_start(); 
+
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +12,7 @@
 	<body>
         <?php include_once 'navbar.php'; ?>
         <div>
-
+            <h1>123</h1>
         </div>
 	</body>
 </html>

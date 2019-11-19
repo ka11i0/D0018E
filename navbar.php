@@ -4,20 +4,15 @@
         <li><a href="custom.php" class="left">Custom Snus</a></li>
         <li><a href="support.php" class="left">Support</a></li>
         <li><a href="om.php" class="left">Om oss</a></li>
-        <li><a href="varukorg.php" class="right">Varukorg</a></li>
-
-        <?php <li><a
-            if (isset($_SESSION["user"])) 
-                { print "href=logout.php";}
-             class="right" >
-            if (isset($_SESSION["user"])) {
-                echo "Logga ut";
-            }
-        </a></li>?>
+    
+        <?php if (isset($_SESSION["user"])) :?>
+                <li><a href=logout.php class='right'>Logga ut</a></li>
+                <li><a href="varukorg.php" class="right">Varukorg</a></li>
+        <?php endif; ?>
 
         <li><a <?php 
             if (isset($_SESSION["user"])) 
-                {print "href=logout.php";}
+                {print "href=kontosida.php";}
             else
                 {print "href=login.php";} 
             ?> class="right">
