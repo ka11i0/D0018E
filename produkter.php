@@ -1,4 +1,19 @@
-<?php session_start(); ?>
+<?php
+include 'ServerCommunication.php'; 
+session_start();
+//select,update,delete,insert needed
+
+    function OutputProducts($sql,$p)
+    {
+    	$result = $p->query($sql);
+    	if($result->num_rows > 0) 
+    	{
+   			return $result;
+   		}
+   		return null;
+	}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,27 +22,34 @@
 </head>
 	<body>
 	<?php include_once 'navbar.php'; ?>
-		<div id="topPadding"></div>
-		<nav id="prodList">
-			<ul>
-				<li id="prod1">Snus1</li>
-				<li id="prod2">Snus2</li>
-				<li id="prod3">Snus3</li>
-				<li id="prod4">Snus4</li>
-			</ul>
-		</nav>
-		<div id="omProdukt">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dolor mi, varius ut sodales vitae, consequat ultrices felis. Etiam tincidunt interdum vehicula. Fusce vel justo lorem. Mauris diam lectus, sagittis vitae risus in, tristique scelerisque neque. In tincidunt egestas dolor, at auctor erat. Maecenas et faucibus eros. Mauris tristique bibendum ante, vitae eleifend libero commodo vitae. Curabitur at arcu eget risus mollis laoreet in non est. Donec fermentum dignissim risus, aliquam dignissim ex consequat bibendum. Ut mauris tellus, malesuada a lectus quis, sodales accumsan ex. Nulla lacinia accumsan turpis, a consectetur est scelerisque aliquet.
-			<br><br>
-			In hac habitasse platea dictumst. Aliquam auctor mollis libero, id dapibus quam gravida non. Suspendisse et ipsum neque. Aenean ut velit vitae justo vulputate mollis. Vivamus ultricies gravida sapien, eu varius augue ullamcorper non. Donec iaculis nunc in posuere pulvinar. Aliquam eget pulvinar urna, eu tincidunt sem. Duis et finibus orci, ut pretium sem. Nulla viverra aliquet nibh, in semper nisi congue eu. Suspendisse potenti.
-			<form id="kop">
-				InsertPrisHere
-				<input type="number" name="amount" min="1" value="1">
-				<button>Lägg till i kundkorg</button>
-			</form>
-		</div>
-		<div id="prodImg">
-			<img src="">
-		</div>
+	<?php 
+		$sql_query1 ="SELECT * FROM `produkt`"; // hämta all produkt info
+   		$p=OpenCon(); // skapar ett connection objekt
+   		$q=Outputproducts($sql_query1,$p);
+   		echo '<div id="topPadding"></div>';
+   		if($q != null) 
+   		  {	
+   			while($row = $q->fetch_assoc())
+   			{
+   				$s=$row["Produktnamn"]; 
+   				echo '<a href="produkter.php?produkt='."$s".'">'."$s".'</a><br>';
+   				
+   			}
+   				   		}
+   		if(isset($_SESSION["user"])){
+        If($_SESSION["user"] == "admin"){
+   			echo '<button onclick="updateform()"type="button"> Lägg till</button>';
+   			//skapa ny databas produkt form
+        }
+    }
+   	CloseCon($p);
+   	$s=$_GET['produkt'];
+	?>
+<script>
+function updateform() {
+  document.getElementById("demo").innerHTML = "Hello World";
+			}
+</script>
+
 	</body>
 </html>
