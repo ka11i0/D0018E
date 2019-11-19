@@ -1,0 +1,8 @@
+#kolumn {
+    flex: 50%;
+}
+
+#box {
+    display: flex;
+}
+
