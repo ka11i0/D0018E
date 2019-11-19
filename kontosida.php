@@ -14,11 +14,38 @@
         <?php include_once 'navbar.php'; ?>
         <div id="box">
             <div id="kolumn">
-                <p>test</p>
+                
+                <form action="<?php $_PHP_SELF ?>" method="post">
+                <p id="headline">Kontouppgifter</p>
+                        <label for="email"><b>Email</b></label>
+                        <input type="email" placeholder="Välj en ny email" name="mail" required>
 
-            </div>
+                        <div id="uppg">
+                        <label for="town"><b>Stad</b></label>
+                        <input type="text" placeholder="" name="town" required>
+                        </div>
+
+                        <div id="uppg">
+                        <label for="post"><b>Postnummer</b></label>
+                        <input type="number" placeholder="" name="postnum" required>
+                        </div>
+
+                        <div id="uppg">
+                        <label for="addr"><b>Address</b></label>
+                        <input type="text" placeholder="" name="addrnum" required>
+                        </div>
+
+                        <div id="uppg">
+                        <label for="tel"><b>Telefonnummer</b></label>
+                        <input type="telnum" placeholder="" name="telnum" required>
+                        </div>
+                        
+                        <button type="submit">Uppdatera</button>
+                </form>
+		    </div>
+
             <div id="kolumn">
-                <p>test</p>
+                <p>Här ska tidigare köp visas</p>
 
             </div>
         </div>     
