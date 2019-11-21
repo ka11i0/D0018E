@@ -24,24 +24,30 @@ UNIQUE(Mail)
 );
 CREATE TABLE historik
 			(Transaktion_ID INT ,
-			 Konto_hist INT,
+			 Person_ID INT,
 			 Datum DATE NOT NULL,
-			 Prod_hist INT,
-FOREIGN KEY(Konto_hist) REFERENCES konto(Person_ID) ON DELETE CASCADE,
-FOREIGN KEY(Prod_hist) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE
+			 Produkt_ID INT,
+			 quantity INT,
+FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE CASCADE,
+FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
+PRIMARY KEY(Transaktion_ID, Produkt_ID)
 );
 CREATE TABLE vaurkorg
-			(Konto_varu INT,
-			 Produkt_varu INT,
-FOREIGN KEY(Konto_varu) REFERENCES konto(Person_ID) ON DELETE CASCADE,
-FOREIGN KEY(Produkt_varu) REFERENCES produkt(Produkt_ID)
+			(Person_ID INT,
+			Produkt_ID INT,
+			quantity INT,
+FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE CASCADE,
+FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
+PRIMARY KEY(Person_ID, Produkt_ID)
 );
 
 CREATE TABLE kommentarer
-			(Person_ID INT NOT NULL, 
+			(Kommentar_ID INT NOT NUll,
+			Person_ID INT NOT NULL, 
 			Produkt_ID INT NOT NULL,
 			kommentar VARCHAR(100) NOT NULL,
 			Datum DATE NOT NULL,
-			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID),
-			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID)
+			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE NULL,
+			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
+			PRIMARY KEY(Kommentar_ID)
 );
