@@ -23,14 +23,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     {
         //få id för nästa user
         $id = nextUserId($p);
+        //lägg till formulär data till databasen
         $account = "INSERT INTO konto (Person_ID, Namn, Lösenord, Födelsedag, 
         privilegie, Mail, Stad, Postnummer, Address, Telefonnummer) VALUES ('$id','$info[0]','$info[1]','$info[3]','0'
         ,'$info[2]','$info[4]','$info[5]','$info[6]','$info[7]')";
-        if ($p->query($account)) {
+        if ($p->query($account)) {//Query gick igenom, användare finns i databasen
             echo "<script type='text/javascript'>alert('Användare skapad');</script>";
         }
-        else{
-            echo "Error: " . $account . "<br>" . $p->error;
+        else{//om query returnerar error så skriv felmeddelande ut
+            echo "<script type='text/javascript'>alert('Nånting gick fel, pröva igen.');</script>";
         }
     }
     else
