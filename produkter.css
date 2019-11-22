@@ -14,6 +14,9 @@ form#kop{
 button{
 	
 }
+.toggla{
+	float:left;
+}
 nav#navigation{
 	width: 100%;
 	height: 59px;

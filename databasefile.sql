@@ -32,7 +32,7 @@ FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE CASCADE,
 FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
 PRIMARY KEY(Transaktion_ID, Produkt_ID)
 );
-CREATE TABLE vaurkorg
+CREATE TABLE varukorg
 			(Person_ID INT,
 			Produkt_ID INT,
 			quantity INT,
@@ -42,12 +42,12 @@ PRIMARY KEY(Person_ID, Produkt_ID)
 );
 
 CREATE TABLE kommentarer
-			(Kommentar_ID INT NOT NUll,
+			(Kommentar_ID INT NOT NULL,
 			Person_ID INT NOT NULL, 
 			Produkt_ID INT NOT NULL,
 			kommentar VARCHAR(100) NOT NULL,
 			Datum DATE NOT NULL,
-			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE NULL,
+			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE CASCADE,
 			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
 			PRIMARY KEY(Kommentar_ID)
 );

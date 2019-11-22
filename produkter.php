@@ -1,4 +1,25 @@
-<?php session_start(); ?>
+<?php
+include 'ServerCommunication.php'; 
+session_start();
+//select,update,delete,insert needed
+
+    function OutputProducts($sql,$p)
+    {
+    	$result = $p->query($sql);
+    	if($result->num_rows > 0) 
+    	{
+   			return $result;
+   		}
+   		return null;
+	}
+
+	function nextprodId($p){
+    $id_query = "SELECT MAX(Produkt_ID) FROM produkt";
+    $result = $p->query($id_query)->fetch_assoc();
+    return $result['MAX(Produkt_ID)'] + 1;
+}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,21 +28,90 @@
 </head>
 	<body>
 	<?php include_once 'navbar.php'; ?>
-		<div id="topPadding"></div>
-		<nav id="prodList">
-			<ul>
-				<li id="prod1">Snus1</li>
-				<li id="prod2">Snus2</li>
-				<li id="prod3">Snus3</li>
-				<li id="prod4">Snus4</li>
-			</ul>
-		</nav>
-		<div id="omProdukt">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dolor mi, varius ut sodales vitae, consequat ultrices felis. Etiam tincidunt interdum vehicula. Fusce vel justo lorem. Mauris diam lectus, sagittis vitae risus in, tristique scelerisque neque. In tincidunt egestas dolor, at auctor erat. Maecenas et faucibus eros. Mauris tristique bibendum ante, vitae eleifend libero commodo vitae. Curabitur at arcu eget risus mollis laoreet in non est. Donec fermentum dignissim risus, aliquam dignissim ex consequat bibendum. Ut mauris tellus, malesuada a lectus quis, sodales accumsan ex. Nulla lacinia accumsan turpis, a consectetur est scelerisque aliquet.
-			<br><br>
-			In hac habitasse platea dictumst. Aliquam auctor mollis libero, id dapibus quam gravida non. Suspendisse et ipsum neque. Aenean ut velit vitae justo vulputate mollis. Vivamus ultricies gravida sapien, eu varius augue ullamcorper non. Donec iaculis nunc in posuere pulvinar. Aliquam eget pulvinar urna, eu tincidunt sem. Duis et finibus orci, ut pretium sem. Nulla viverra aliquet nibh, in semper nisi congue eu. Suspendisse potenti.
+	<?php 
+		$p=OpenCon(); 
+
+		$info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning');
+   	    if(CheckPOST($info))
+   	    {
+ 		      $info[0] = $_POST['Produktnamn'];
+   			  $info[1] = $_POST['Img_filsökväg'];
+    	      $info[2] = $_POST['Pris'];
+   			  $info[3] = $_POST['Saldo'];
+   			  $info[4] = $_POST['Produktbeskrivning'];
+   	    	  $id = nextprodId($p);
+        	  $squery = "INSERT INTO produkt(Produktnamn,Produkt_ID,Img_filsökväg,Pris,Saldo,Produktbeskrivning) VALUES ('$info[0]','$id','$info[1]','$info[2]','$info[3]','$info[4]')";
+       		  $p->query($squery);
+   	    }
+
+
+
+
+		$sql_query1 ="SELECT Produktnamn FROM `produkt`"; // hämta all produkt info
+   		$p=OpenCon(); // skapar ett connection objekt
+   		$q=Outputproducts($sql_query1,$p);
+   		echo '<div id="topPadding"><br>';
+   		if($q != null) 
+   		{	
+   			while($row = $q->fetch_assoc())
+   			{
+   				$s=$row["Produktnamn"]; 
+   				echo '<a href="produkter.php?produkt='."$s".'">'."$s".'</a><br><br>';
+   				
+   			}
+   		}
+
+   		if(isset($_SESSION["user"]))
+   		{
+        	If($_SESSION["user"] == "admin")
+        		{
+   				echo 
+   				 '
+   				   <button onclick="updateform()"type="button">Ny vara</button>
+   				   	<form id="toggla" action="produkter.php" method="post"><br>
+			  			<label for="x"><b>varunamn</b></label>
+			  			<input type="text" placeholder="Välj namn" name="Produktnamn" required><br>
+			  			<label for="x"><b>Bildsökväg</b></label>
+			  			<input type="text" placeholder="filepath här" name="Img_filsökväg" required><br>
+		  				<label for="x"><b>Pris</b></label>
+			  			<input type="text" placeholder="Välj ett pris" name="Pris" required><br>
+			  			<label for="x"><b>Saldo</b></label>
+			  			<input type="text" placeholder="Saldo" name="Saldo" required><br>
+			  			<label for="x"><b>Produktbeskrivning</b></label>
+			  			<input type="text" placeholder="välj din beskrivning på produkten" name="Produktbeskrivning" required><br>
+
+                 		<button type="submit">Lägg till</button>
+                 	</form>
+                   </div>
+
+                 <script>
+  				  document.getElementById("toggla").style.display = "none";
+				 </script>';
+   					//skapa ny databas produkt form
+       			 }
+    	}
+    	else
+    	{
+    		echo '</div>';
+    	}
+
+
+   		if(isset($_GET['produkt']))
+   		{
+   		  $s=$_GET['produkt'];
+   		  $sql_query2 ="SELECT * FROM `produkt`WHERE Produktnamn='{$s}' "; // hämta all produkt info
+   		  $q=Outputproducts($sql_query2,$p);
+   		  $row = $q->fetch_assoc();
+   		  $a=$row["Img_filsökväg"];
+   		  $b=$row["Pris"];
+   		  $c=$row["Saldo"];
+   		  $d=$row["Produktbeskrivning"];
+   		  
+   		  echo '<div id="omProdukt">'."$s".'<br><br>
+			Pris: $'."$b".'.00<br><br>'
+			."$d".'<br>
 			<form id="kop">
-				InsertPrisHere
+				Antal:
 				<input type="number" name="amount" min="1" value="1">
 				<button>Lägg till i kundkorg</button>
 			</form>
@@ -29,5 +119,22 @@
 		<div id="prodImg">
 			<img src="">
 		</div>
+		</div>';
+  	 	}
+
+	CloseCon($p);
+	?>
+<script>
+function updateform() { //ica basic
+  var x = document.getElementById("toggla");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+			
+</script>
+
 	</body>
 </html>
