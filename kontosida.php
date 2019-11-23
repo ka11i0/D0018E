@@ -1,6 +1,6 @@
 <?php 
     include 'ServerCommunication.php'; 
-    session_start(); 
+    session_start();
 
 
 ?>
@@ -18,30 +18,31 @@
                 <form action="<?php $_PHP_SELF ?>" method="post">
                 <p id="headline">Kontouppgifter</p>
                         <label for="email"><b>Email</b></label>
-                        <input type="email" placeholder="Välj en ny email" name="mail" required>
+                        <input type="email" value="<?php echo $_SESSION["email"] ?>" name="mail" required>
 
                         <div id="uppg">
                         <label for="town"><b>Stad</b></label>
-                        <input type="text" placeholder="" name="town" required>
+                        <input type="text" value="<?php echo $_SESSION["town"] ?>" name="town" required>
                         </div>
 
                         <div id="uppg">
                         <label for="post"><b>Postnummer</b></label>
-                        <input type="number" placeholder="" name="postnum" required>
+                        <input type="number" value="<?php echo $_SESSION["pnr"] ?>" name="postnum" required>
                         </div>
 
                         <div id="uppg">
                         <label for="addr"><b>Address</b></label>
-                        <input type="text" placeholder="" name="addrnum" required>
+                        <input type="text" value="<?php echo $_SESSION["addr"] ?>" name="addrnum" required>
                         </div>
 
                         <div id="uppg">
                         <label for="tel"><b>Telefonnummer</b></label>
-                        <input type="telnum" placeholder="" name="telnum" required>
+                        <input type="telnum" value="<?php echo $_SESSION["telnr"] ?>" name="telnum" required>
                         </div>
                         
                         <button type="submit">Uppdatera</button>
                 </form>
+                
 		    </div>
 
             <div id="kolumn">
