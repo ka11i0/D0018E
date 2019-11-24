@@ -2,6 +2,45 @@
     include 'ServerCommunication.php'; 
     session_start();
 
+    $info = array("email", "town", "postnum", "addrnum", "telnum");
+
+    if($_SERVER["REQUEST_METHOD"] == "POST")
+    {
+        $info[0] = $_POST['mail'];
+        $info[1] = $_POST['town'];
+        $info[2] = $_POST['postnum'];
+        $info[3] = $_POST['addrnum'];
+        $info[4] = $_POST['telnum'];
+
+        //skapa databas connection
+        $p=OpenCon();  
+
+        $uname = $_SESSION["user"];
+
+        if(isUnique($info, $p))
+        {
+            $account = "UPDATE konto SET Mail='$info[0]', Stad='$info[1]', Postnummer='$info[2]', Address='$info[3]', Telefonnummer='$info[4]' 
+            WHERE `Namn` = '$uname'";
+            if ($p->query($account)) {
+                echo "<script type='text/javascript'>alert('Dina kontouppgifter har blivit uppdaterade');</script>";
+            }
+            else {
+                echo "Error: " . $account . "<br>" . $p->error;
+            }
+        }
+    }
+
+    function isUnique($info, $p)//kollar om email är unik
+    {
+        $email_query = "SELECT EMAIL FROM `konto` WHERE EMAIL = '$info[0]'";
+        if ($p->query($email_query)->num_rows > 0)
+        {
+            return false;
+        } 
+        else{
+            return true;
+    }
+}
 
 ?>
 <!DOCTYPE html>
