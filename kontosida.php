@@ -4,6 +4,7 @@
 
     $info = array("email", "town", "postnum", "addrnum", "telnum");
 
+    //vid uppdatering
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
         $info[0] = $_POST['mail'];
@@ -22,6 +23,12 @@
             $account = "UPDATE konto SET Mail='$info[0]', Stad='$info[1]', Postnummer='$info[2]', Address='$info[3]', Telefonnummer='$info[4]' 
             WHERE `Namn` = '$uname'";
             if ($p->query($account)) {
+                //uppdatera session info
+                $_SESSION["email"]=$_POST['mail'];
+			    $_SESSION["town"]=$_POST['town'];
+			    $_SESSION["pnr"]=$_POST['postnum'];
+			    $_SESSION["addr"]=$_POST['addrnum'];
+			    $_SESSION["telnr"]=$_POST['telnum'];
                 echo "<script type='text/javascript'>alert('Dina kontouppgifter har blivit uppdaterade');</script>";
             }
             else {
