@@ -7,7 +7,12 @@
     	$s=UserCheck($sql_query1,$p); 
     	if($s!=0)
     	{
-	 		$_SESSION["user"]=$s["Namn"];
+			 $_SESSION["user"]=$s["Namn"];
+			 $_SESSION["email"]=$s["Mail"];
+			 $_SESSION["town"]=$s["Stad"];
+			 $_SESSION["pnr"]=$s["Postnummer"];
+			 $_SESSION["addr"]=$s["Address"];
+			 $_SESSION["telnr"]=$s["Telefonnummer"];
 	 		header('Location: produkter.php'); 
 	    }
  		else 
@@ -21,7 +26,7 @@
     if(CheckPOST($info)){
 		$psw = $_POST['psw']; //ta bort
 		$uname = $_POST['uname'];
-    	$sql_query1 ="SELECT Namn,Lösenord FROM `konto` WHERE 
+    	$sql_query1 ="SELECT Namn,Lösenord,Mail,Stad,Postnummer,Address,Telefonnummer FROM `konto` WHERE 
 		Namn='{$uname}' AND Lösenord='{$psw}'";
     	$p=OpenCon(); // skapar ett connection objekt
    		LoginStatus($sql_query1,$p);
@@ -48,9 +53,6 @@
 			  <input type="password" placeholder="Skriv ditt lösenord" name="psw" required>
 		  
 			  <button type="submit">Logga in</button>
-			  <label>
-				<input type="checkbox" checked="checked" name="remember"> Kom ihåg användarnamn
-			  </label>
 			  <div>
 			  		<span style="float:left"> <a href="nyttkonto.php">Skapa nytt konto</a></span>
                     <span style="float:right"> <a href="#">Glömt lösenord?</a></span>
@@ -58,6 +60,6 @@
 			</div>
 		  
 			
-		</div>
+		</form>
 	</body>
 </html>
