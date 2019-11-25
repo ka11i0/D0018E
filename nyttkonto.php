@@ -77,7 +77,7 @@ function nextUserId($p){
                 <input type="text" placeholder="Välj ett användarnamn" name="uname" required>
             
                 <label for="psw"><b>Lösenord*</b></label>
-                <input type="password" placeholder="Välj ett användarnamn" name="psw" required>
+                <input type="password" placeholder="Välj ett lösenord" name="psw" required>
                 
                 <label for="email"><b>Email*</b></label>
                 <input type="email" placeholder="Fyll i din email" name="mail" required>
@@ -114,6 +114,6 @@ function nextUserId($p){
 			</div>
 		  
 			
-		</div>
+        </form>
 	</body>
 </html>
