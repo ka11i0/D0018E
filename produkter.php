@@ -66,6 +66,14 @@ function nextprodId($p){
 	<?php include_once 'navbar.php'; ?>
 	<?php 
 		$p=OpenCon(); 
+		$admin=false;
+		if(isset($_SESSION["user"]))
+   		{
+        	If($_SESSION["user"] == "admin")
+        		{
+        			$admin=true;
+        		}
+        }
 
 		$info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning');
    	    if(CheckPOST($info))
@@ -80,6 +88,12 @@ function nextprodId($p){
        		  $p->query($squery);
    	    }
 
+   	    if(isset($_GET['uppdatera']))
+   	    {		
+   	    	  $ä=$_GET['uppdatera'];
+   	    	  $squery = "DELETE FROM produkt WHERE Produktnamn='{$ä}';";
+       		  $p->query($squery);	
+   	    }
 
 
 
@@ -92,15 +106,16 @@ function nextprodId($p){
    			while($row = $q->fetch_assoc())
    			{
    				$s=$row["Produktnamn"]; 
-   				echo '<a href="produkter.php?produkt='."$s".'">'."$s".'</a><br><br>';
-   				
+   				$x="";
+   				if($admin){
+   					$x='<a href="produkter.php?uppdatera='."$s".'"><button>Ta bort</button></a>';
+   				}
+   				echo '<a href="produkter.php?produkt='."$s".'">'."$s".'</a> &nbsp;'."$x".'<br><br>'; //kanske ta bort space för bild istället
    			}
    		}
 
-   		if(isset($_SESSION["user"]))
-   		{
-        	If($_SESSION["user"] == "admin")
-        		{
+        if($admin)
+        	{
    				echo 
    				 '
    				   <button onclick="updateform()"type="button">Ny vara</button>
@@ -124,12 +139,11 @@ function nextprodId($p){
   				  document.getElementById("toggla").style.display = "none";
 				 </script>';
    					//skapa ny databas produkt form
-       			 }
-    	}
+       		 }
     	else
-    	{
-    		echo '</div>';
-    	}
+    		{
+    			echo '</div>';
+    		}
 
 
    		if(isset($_GET['produkt']))
