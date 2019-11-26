@@ -1,0 +1,13 @@
+table, tr, th{
+	border: 1px solid black;
+	border-collapse: collapse;
+	margin: auto;
+	text-align: left;
+}
+table{
+	width: 50%;
+	margin-top: 3%;
+}
+#title{
+	font-size: 20px;
+}

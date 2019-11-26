@@ -3,20 +3,56 @@ include 'ServerCommunication.php';
 session_start();
 //select,update,delete,insert needed
 
-    function OutputProducts($sql,$p)
-    {
-    	$result = $p->query($sql);
-    	if($result->num_rows > 0) 
-    	{
-   			return $result;
-   		}
-   		return null;
-	}
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_SESSION["user"])) {
+        $p=OpenCon();
+        //få antalet, produkt namn, användare id
+        $prod = $_POST['produkt'];
+        $quant = $_POST['amount'];
+        $user_id = $_SESSION["id"];
+        //översätta produkt namn till dess id
+        $prod_query = "SELECT Produkt_ID FROM produkt WHERE Produktnamn='$prod'";
+        $prod_result = $p->query($prod_query)->fetch_assoc();
+        $prod = $prod_result["Produkt_ID"];
+        //få fram om produkten redan finns i varukorg tabellen
+        $quant_query = "SELECT quantity FROM varukorg WHERE Person_ID='$user_id' AND Produkt_ID='$prod'";
+        $quant_result = $p->query($quant_query);
+        //om produkten finns i tabellen updatera antalet, annars lägg in i tabellen
+        if (mysqli_num_rows($quant_result)>0) {
+            $quant_result=$quant_result->fetch_assoc();
+            $quant = $quant_result["quantity"] + $quant;
+            $varukorg_query = "UPDATE varukorg SET quantity = '$quant' WHERE Person_ID = '$user_id' AND Produkt_ID = '$prod'";
+        }
+        else{
+            $varukorg_query = "INSERT INTO varukorg (Person_ID, Produkt_ID, quantity) VALUES ('$user_id', '$prod', '$quant')";
+        }
+        if ($p->query($varukorg_query)){
+                echo "<script type='text/javascript'>alert('Vald vara finns nu i din varukorg.');</script>";
+        }
+        else{
+            echo "<script type='text/javascript'>alert('".mysqli_error($p)."');</script>";   
+        }
+        CloseCon($p);
+    }
+    else {
+        echo "<script type='text/javascript'>alert('Logga in för att börja handla.');</script>";
+    }
+}
+  
+function OutputProducts($sql,$p)
+{
+  $result = $p->query($sql);
+  if($result->num_rows > 0) 
+  {
+    return $result;
+  }
+    return null;
+}
 
-	function nextprodId($p){
-    $id_query = "SELECT MAX(Produkt_ID) FROM produkt";
-    $result = $p->query($id_query)->fetch_assoc();
-    return $result['MAX(Produkt_ID)'] + 1;
+function nextprodId($p){
+  $id_query = "SELECT MAX(Produkt_ID) FROM produkt";
+  $result = $p->query($id_query)->fetch_assoc();
+  return $result['MAX(Produkt_ID)'] + 1;
 }
 
 ?>
@@ -36,7 +72,7 @@ session_start();
    	    {
  		      $info[0] = $_POST['Produktnamn'];
    			  $info[1] = $_POST['Img_filsökväg'];
-    	      $info[2] = $_POST['Pris'];
+    	    $info[2] = $_POST['Pris'];
    			  $info[3] = $_POST['Saldo'];
    			  $info[4] = $_POST['Produktbeskrivning'];
    	    	  $id = nextprodId($p);
@@ -110,10 +146,12 @@ session_start();
    		  echo '<div id="omProdukt">'."$s".'<br><br>
 			Pris: $'."$b".'.00<br><br>'
 			."$d".'<br>
-			<form id="kop">
+			<form action="produkter.php" method="post">
 				Antal:
 				<input type="number" name="amount" min="1" value="1">
-				<button>Lägg till i kundkorg</button>
+                <input type="hidden" name="produkt" value="'."$s".'">
+
+				<button type="submit">Lägg till i kundkorg</button>
 			</form>
 		</div>
 		<div id="prodImg">
