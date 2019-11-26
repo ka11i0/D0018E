@@ -48,11 +48,12 @@ function OutputProducts($sql,$p)
   }
     return null;
 }
-	function nextprodId($p){
-    $id_query = "SELECT MAX(Produkt_ID) FROM produkt";
-    $result = $p->query($id_query)->fetch_assoc();
-    return $result['MAX(Produkt_ID)'] + 1;
-	}
+
+function nextprodId($p){
+  $id_query = "SELECT MAX(Produkt_ID) FROM produkt";
+  $result = $p->query($id_query)->fetch_assoc();
+  return $result['MAX(Produkt_ID)'] + 1;
+}
 
 ?>
 <!DOCTYPE html>
