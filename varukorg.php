@@ -14,6 +14,9 @@
 		    <th>Antal</th>
 		    <th>Pris</th>
 		</tr>
+		<?
+			
+		?>
 	</table>
 </body>
 </html>

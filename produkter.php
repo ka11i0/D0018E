@@ -146,7 +146,7 @@ function nextprodId($p){
    		  echo '<div id="omProdukt">'."$s".'<br><br>
 			Pris: $'."$b".'.00<br><br>'
 			."$d".'<br>
-			<form action="produkter.php" method="post">
+			<form method="post">
 				Antal:
 				<input type="number" name="amount" min="1" value="1">
                 <input type="hidden" name="produkt" value="'."$s".'">
