@@ -19,7 +19,6 @@
         <?php 
             if (isset($_SESSION["user"])) {
                 print_r($_SESSION["user"]);
-                //echo "string";
             }
             else{
                 echo "Logga in/Registrera";	

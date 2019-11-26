@@ -7,12 +7,13 @@
     	$s=UserCheck($sql_query1,$p); 
     	if($s!=0)
     	{
-			 $_SESSION["user"]=$s["Namn"];
-			 $_SESSION["email"]=$s["Mail"];
-			 $_SESSION["town"]=$s["Stad"];
-			 $_SESSION["pnr"]=$s["Postnummer"];
-			 $_SESSION["addr"]=$s["Address"];
-			 $_SESSION["telnr"]=$s["Telefonnummer"];
+			$_SESSION["user"]=$s["Namn"];
+			$_SESSION["email"]=$s["Mail"];
+			$_SESSION["town"]=$s["Stad"];
+			$_SESSION["pnr"]=$s["Postnummer"];
+			$_SESSION["addr"]=$s["Address"];
+			$_SESSION["telnr"]=$s["Telefonnummer"];
+			$_SESSION["id"]=$s["Person_ID"];
 	 		header('Location: produkter.php'); 
 	    }
  		else 
@@ -26,7 +27,7 @@
     if(CheckPOST($info)){
 		$psw = $_POST['psw']; //ta bort
 		$uname = $_POST['uname'];
-    	$sql_query1 ="SELECT Namn,Lösenord,Mail,Stad,Postnummer,Address,Telefonnummer FROM `konto` WHERE 
+    	$sql_query1 ="SELECT Person_ID, Namn,Lösenord,Mail,Stad,Postnummer,Address,Telefonnummer FROM `konto` WHERE 
 		Namn='{$uname}' AND Lösenord='{$psw}'";
     	$p=OpenCon(); // skapar ett connection objekt
    		LoginStatus($sql_query1,$p);
@@ -43,7 +44,7 @@
 </head>
 	<body>
 		<?php include_once 'navbar.php'; ?>
-		<form action="<?php $_PHP_SELF ?>" method="post">
+		<form action="produkter.php" method="post">
 		  
 			<div class="container">
 			  <label for="uname"><b>Användarnamn</b></label>
