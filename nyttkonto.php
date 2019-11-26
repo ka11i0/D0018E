@@ -70,7 +70,7 @@ function nextUserId($p){
 	<body>
         <?php include_once 'navbar.php'; ?>
         
-		<form action="kontosida.php" method="post">
+		<form method="post">
 		  
 			<div class="container">
                 <label for="uname"><b>Användarnamn*</b></label>

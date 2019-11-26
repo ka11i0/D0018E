@@ -3,7 +3,7 @@ include 'ServerCommunication.php';
 session_start();
 //select,update,delete,insert needed
 
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SESSION["user"])) {
         $p=OpenCon();
         //få antalet, produkt namn, användare id
