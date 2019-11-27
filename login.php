@@ -44,7 +44,7 @@
 </head>
 	<body>
 		<?php include_once 'navbar.php'; ?>
-		<form action="" method="post">
+		<form method="post">
 		  
 			<div class="container">
 			  <label for="uname"><b>Användarnamn</b></label>
