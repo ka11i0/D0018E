@@ -48,3 +48,36 @@ function CheckPOST($info)
 	}
 		return false;
 }
+function skapakommentar(){
+	
+}
+
+function allakommentarsdata(){
+
+}
+function tabortkomemntar(){
+
+}
+function nextCommentId($p){
+  $id_query = "SELECT MAX(Kommentar_ID) FROM kommentarer";
+  $result = $p->query($id_query)->fetch_assoc();
+  if ($result['MAX(Kommentar_ID)'] !=NULL) {
+  	return $result['MAX(Kommentar_ID)'] + 1;
+  }
+  return 0;
+}
+function OutputProducts($sql,$p)
+{
+  $result = $p->query($sql);
+  if($result->num_rows > 0) 
+  {
+    return $result;
+  }
+    return null;
+}
+
+function nextprodId($p){
+  $id_query = "SELECT MAX(Produkt_ID) FROM produkt";
+  $result = $p->query($id_query)->fetch_assoc();
+  return $result['MAX(Produkt_ID)'] + 1;
+}
