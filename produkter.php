@@ -160,9 +160,13 @@ if(!$admin)
 		<div id="prodImg">
 			<img src="">
 		</div>';
-		CloseCon($p); } ?>
+    } 
+ ?>
 </div>
 </div>
+<?php include_once 'kommentarer.php';
+  CloseCon($p);
+?>
 
 <script>
 function updateform() { //ica basic
