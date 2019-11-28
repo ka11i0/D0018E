@@ -18,36 +18,23 @@
 
         $uname = $_SESSION["user"];
 
-        if(isUnique($info, $p))
-        {
-            $account = "UPDATE konto SET Mail='$info[0]', Stad='$info[1]', Postnummer='$info[2]', Address='$info[3]', Telefonnummer='$info[4]' 
-            WHERE `Namn` = '$uname'";
-            if ($p->query($account)) {
-                //uppdatera session info
-                $_SESSION["email"]=$_POST['mail'];
-			    $_SESSION["town"]=$_POST['town'];
-			    $_SESSION["pnr"]=$_POST['postnum'];
-			    $_SESSION["addr"]=$_POST['addrnum'];
-			    $_SESSION["telnr"]=$_POST['telnum'];
-                echo "<script type='text/javascript'>alert('Dina kontouppgifter har blivit uppdaterade');</script>";
-            }
-            else {
-                echo "Error: " . $account . "<br>" . $p->error;
-            }
+        
+        $account = "UPDATE konto SET Mail='$info[0]', Stad='$info[1]', Postnummer='$info[2]', Address='$info[3]', Telefonnummer='$info[4]' 
+        WHERE `Namn` = '$uname'";
+        if ($p->query($account)) {
+            //uppdatera session info
+            $_SESSION["email"]=$_POST['mail'];
+            $_SESSION["town"]=$_POST['town'];
+            $_SESSION["pnr"]=$_POST['postnum'];
+            $_SESSION["addr"]=$_POST['addrnum'];
+            $_SESSION["telnr"]=$_POST['telnum'];
+            echo "<script type='text/javascript'>alert('Dina kontouppgifter har blivit uppdaterade');</script>";
         }
+        else {
+            echo "<script type='text/javascript'>alert('Den emailen är redan tagen');</script>";
+        }   
     }
 
-    function isUnique($info, $p)//kollar om email är unik
-    {
-        $email_query = "SELECT EMAIL FROM `konto` WHERE EMAIL = '$info[0]'";
-        if ($p->query($email_query)->num_rows > 0)
-        {
-            return false;
-        } 
-        else{
-            return true;
-    }
-}
 
 ?>
 <!DOCTYPE html>
