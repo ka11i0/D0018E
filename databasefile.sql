@@ -43,11 +43,11 @@ PRIMARY KEY(Person_ID, Produkt_ID)
 
 CREATE TABLE kommentarer
 			(Kommentar_ID INT NOT NULL,
-			Person_ID INT NOT NULL, 
+			Person_ID INT(20), 
 			Produkt_ID INT NOT NULL,
 			kommentar VARCHAR(100) NOT NULL,
 			Datum DATE NOT NULL,
-			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE CASCADE,
+			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE SET NULL,
 			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
 			PRIMARY KEY(Kommentar_ID)
 );
