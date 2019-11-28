@@ -95,7 +95,7 @@ form#kop{
 }
 #nykommentar{
 	float:right;
-	padding-right:940px; 
+	padding-right:700px; 
 
 
 }
@@ -104,6 +104,7 @@ div.namnicon{
     vertical-align: top;
     display: inline-block;
     text-align: center;
+    margin-right: 3px;
 }
 	
 
@@ -112,4 +113,23 @@ div.namnicon{
 }
 .caption {
     display: block;
+}
+#Endakommentar{
+	float:right;
+	padding-right: 700px;
+}
+.textkommentar{
+	border:1px solid grey;
+	width:376px;
+	height:65px;
+	padding-left: 5px;
+	float:right;
+	background: white;
+}
+#submitknapp{
+	margin-left:328px; 
+	margin-top: 3px;
+}
+.hidden{
+	display: none;
 }

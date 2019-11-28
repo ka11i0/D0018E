@@ -1,5 +1,6 @@
 <?php
 include 'ServerCommunication.php'; 
+//include 'kommentarer.php';
 session_start();
 $p=OpenCon(); 
 $admin=false;
@@ -11,8 +12,8 @@ if(isset($_SESSION["user"]))
         			$admin=true;
         		}
         }
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+$info1 = array('produkt','amount');
+if (CheckPOST($info1)) {
     if (isset($_SESSION["user"])) {
         //få antalet, produkt namn, användare id
         $prod = $_POST['produkt'];
@@ -46,35 +47,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
   
-function OutputProducts($sql,$p)
-{
-  $result = $p->query($sql);
-  if($result->num_rows > 0) 
-  {
-    return $result;
-  }
-    return null;
-}
 
-function nextprodId($p){
-  $id_query = "SELECT MAX(Produkt_ID) FROM produkt";
-  $result = $p->query($id_query)->fetch_assoc();
-  return $result['MAX(Produkt_ID)'] + 1;
+
+if (isset($_GET['comment'])) {
+  if (isset($_SESSION["user"])) 
+    {
+      if ($_GET['comment']!="") {
+            $g=$_GET['comment'];
+            $Kom_id=nextCommentId($p);
+            $prod = $_GET['produkt'];
+            $s=$_SESSION["user"];
+            $prod_query = "SELECT Produkt_ID FROM produkt WHERE Produktnamn='$prod'";
+            $userid_query = "SELECT Person_ID FROM konto WHERE Namn='$s'";
+            $prod_result = $p->query($prod_query)->fetch_assoc();
+            $userid_result = $p->query($userid_query)->fetch_assoc();
+            $user_idd = $userid_result["Person_ID"];
+            $prod_idd = $prod_result["Produkt_ID"];
+            $query3= "INSERT INTO `kommentarer` (`Kommentar_ID`, `Person_ID`, `Produkt_ID`, `kommentar`, `Datum`) VALUES ('$Kom_id', '$user_idd', '$prod_idd', '$g', CURRENT_DATE())";
+            $p->query($query3);
+        }
+      }
+  else
+    {
+    echo "<script type='text/javascript'>alert('Du måste vara inloggad för att kunna kommentera');</script>";
+    }
 }
 
 if(isset($_GET['uppdatera']))
 {		
 	  $ä=$_GET['uppdatera'];
 	  $squery = "DELETE FROM produkt WHERE Produktnamn='{$ä}';";
-	  $p->query($squery);	
+	  if ($p->query($squery)) {
+      echo "<script type='text/javascript'>alert('Produkten finns inte längre');</script>";
+    }	
 }
 
 $info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning');
 if(CheckPOST($info))
 {
-      $info[0] = $_POST['Produktnamn'];
+    $info[0] = $_POST['Produktnamn'];
 	  $info[1] = $_POST['Img_filsökväg'];
-      $info[2] = $_POST['Pris'];
+    $info[2] = $_POST['Pris'];
 	  $info[3] = $_POST['Saldo'];
 	  $info[4] = $_POST['Produktbeskrivning'];
 	  $id = nextprodId($p);
@@ -128,14 +141,24 @@ if(CheckPOST($info))
 </div>
 <script> document.getElementById("toggla").style.display = "none" </script>
 <div id="bildotext">
+<script>
+function updateform() { //ica basic
+  var x = document.getElementById("toggla");
+  if (x.style.display === "none") {
+    x.style.display = "block"; 
+  } else {
+    x.style.display = "none";
+    
+  }
+}     
+</script>
 <?php    	
 if(!$admin)
 	{
-		
 		echo '<script> document.getElementById("toggla2").style.display = "none" </script>';
     }    	
 
-	if(isset($_GET['produkt']))
+if(isset($_GET['produkt']))
    		{
    		  $s=$_GET['produkt'];
    		  $sql_query2 ="SELECT * FROM `produkt`WHERE Produktnamn='{$s}' "; // hämta all produkt info
@@ -145,6 +168,7 @@ if(!$admin)
    		  $b=$row["Pris"];
    		  $c=$row["Saldo"];
    		  $d=$row["Produktbeskrivning"];
+        $f=$row["Produkt_ID"];
    		  
    		  echo '<div id="omProdukt">'."$s".'<br><br>
 			Pris: $'."$b".'.00<br><br>'
@@ -160,24 +184,15 @@ if(!$admin)
 		<div id="prodImg">
 			<img src="">
 		</div>';
+    include_once 'kommentarer.php';
     } 
  ?>
 </div>
 </div>
-<?php include_once 'kommentarer.php';
+<?php 
   CloseCon($p);
 ?>
 
-<script>
-function updateform() { //ica basic
-  var x = document.getElementById("toggla");
-  if (x.style.display === "none") {
-    x.style.display = "block"; 
-  } else {
-    x.style.display = "none";
-    
-  }
-}			
-</script>
+
 </body>
 </html>
