@@ -27,7 +27,7 @@
 				</div>
 				<div class="textkommentar">
 				 '.$c.'
-				</div><br>
+				<div id=datum>'.$d.' </div></div><br>
 				</div> ';	
    			}
    		}
@@ -36,14 +36,14 @@
 <div id="nykommentar">
 <form action="produkter.php" method="get" id="usrform">
 <div class="namnicon">
-    <img src="<?php if(isset($_SESSION["user"]) and $_SESSION["user"] =="admin") 
-    				{	
-    						echo"admin.png";		
-   					}
-    					else{
-    					 echo"user.png";
-    					} ?>" class="img1">
-    <span class="caption"><?php if(isset($_SESSION["user"])) {$m=$_SESSION["user"]; echo"$m"; } else{echo"user";} ?> </span>
+ 	<img src="<?php if(isset($_SESSION["user"]) and $_SESSION["user"] =="admin") 
+   		{	
+    		echo"admin.png";		
+   		}
+    	else{
+    		 echo"user.png";
+    		} ?>"
+    		 class="img1"><span class="caption"><?php if(isset($_SESSION["user"])) {$m=$_SESSION["user"]; echo"$m"; } else{echo"user";} ?> </span>
 </div>
 <textarea id="kommetararea" rows="4" cols="50" name="comment" form="usrform"></textarea><br>
 <textarea class="hidden" rows="4" cols="50" name="produkt" form="usrform"><?php echo"$s";?></textarea><br>

@@ -2,7 +2,7 @@
 include 'ServerCommunication.php'; 
 //include 'kommentarer.php';
 session_start();
-$p=OpenCon(); 
+
 $admin=false;
 
 if(isset($_SESSION["user"]))
@@ -12,6 +12,10 @@ if(isset($_SESSION["user"]))
         			$admin=true;
         		}
         }
+
+function hanteravarukorg()
+{
+$p=OpenCon(); 
 $info1 = array('produkt','amount');
 if (CheckPOST($info1)) {
     if (isset($_SESSION["user"])) {
@@ -46,9 +50,10 @@ if (CheckPOST($info1)) {
         echo "<script type='text/javascript'>alert('Logga in för att börja handla.');</script>";
     }
 }
-  
-
-
+CloseCon($p);
+}  
+function uppdaterakommentarer(){
+$p=OpenCon(); 
 if (isset($_GET['comment'])) {
   if (isset($_SESSION["user"])) 
     {
@@ -65,15 +70,18 @@ if (isset($_GET['comment'])) {
             $prod_idd = $prod_result["Produkt_ID"];
             $query3= "INSERT INTO `kommentarer` (`Kommentar_ID`, `Person_ID`, `Produkt_ID`, `kommentar`, `Datum`) VALUES ('$Kom_id', '$user_idd', '$prod_idd', '$g', CURRENT_DATE())";
             $p->query($query3);
+            header('Location: produkter.php?produkt='."$prod".''); //annars om du refresha uppdateras sidan om igen för för get requesten är kvar i headern.
         }
-      }
-      
+      }     
   else
     {
     echo "<script type='text/javascript'>alert('Du måste vara inloggad för att kunna kommentera');</script>";
     }
 }
-
+CloseCon($p);
+}
+function tabortprodukt(){
+$p=OpenCon();
 if(isset($_GET['uppdatera']))
 {		
 	  $ä=$_GET['uppdatera'];
@@ -82,20 +90,28 @@ if(isset($_GET['uppdatera']))
       echo "<script type='text/javascript'>alert('Produkten finns inte längre');</script>";
     }	
 }
-
+CloseCon($p);
+}
+function läggtillprodukt(){
+$p=OpenCon();
 $info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning');
 if(CheckPOST($info))
 {
-    $info[0] = $_POST['Produktnamn'];
+      $info[0] = $_POST['Produktnamn'];
 	  $info[1] = $_POST['Img_filsökväg'];
-    $info[2] = $_POST['Pris'];
+     $info[2] = $_POST['Pris'];
 	  $info[3] = $_POST['Saldo'];
 	  $info[4] = $_POST['Produktbeskrivning'];
 	  $id = nextprodId($p);
       $squery = "INSERT INTO produkt(Produktnamn,Produkt_ID,Img_filsökväg,Pris,Saldo,Produktbeskrivning) VALUES ('$info[0]','$id','$info[1]','$info[2]','$info[3]','$info[4]')";
 	  $p->query($squery);
 }
-
+CloseCon($p);
+}
+hanteravarukorg();
+uppdaterakommentarer();
+tabortprodukt();
+läggtillprodukt();
 ?>
 <!DOCTYPE html>
 <html>
@@ -109,6 +125,7 @@ if(CheckPOST($info))
 	<div id="main">
 	<div id="produktlänkar">
 	<?php 
+		$p=OpenCon();
 		$sql_query1 ="SELECT Produktnamn FROM `produkt`"; // hämta all produkt info
    		$q=Outputproducts($sql_query1,$p);
    		if($q != null) 

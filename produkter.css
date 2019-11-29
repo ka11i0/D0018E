@@ -133,3 +133,10 @@ div.namnicon{
 .hidden{
 	display: none;
 }
+#datum{
+  position: relative;
+  top:30px;
+  text-align: right;
+  margin-right: 5px;
+  font-size: 12px;
+}
