@@ -67,6 +67,7 @@ if (isset($_GET['comment'])) {
             $p->query($query3);
         }
       }
+      
   else
     {
     echo "<script type='text/javascript'>alert('Du måste vara inloggad för att kunna kommentera');</script>";
