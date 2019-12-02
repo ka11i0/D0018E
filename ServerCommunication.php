@@ -48,16 +48,7 @@ function CheckPOST($info)
 	}
 		return false;
 }
-function skapakommentar(){
-	
-}
 
-function allakommentarsdata(){
-
-}
-function tabortkomemntar(){
-
-}
 function nextCommentId($p){
   $id_query = "SELECT MAX(Kommentar_ID) FROM kommentarer";
   $result = $p->query($id_query)->fetch_assoc();

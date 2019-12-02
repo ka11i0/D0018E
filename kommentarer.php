@@ -27,8 +27,21 @@
 				</div>
 				<div class="textkommentar">
 				 '.$c.'
-				<div id=datum>'.$d.' </div></div><br>
-				</div> ';	
+				<div id=datum>'.$d.' </div></div>
+				 <div class="rate">
+   		 <input type="radio" id="star5" name="rate" value="5" />
+    <label for="star5" title="text">5 stars</label>
+    <input type="radio" id="star4" name="rate" value="4" />
+    <label for="star4" title="text">4 stars</label>
+    <input type="radio" id="star3" name="rate" value="3" />
+    <label for="star3" title="text">3 stars</label>
+    <input type="radio" id="star2" name="rate" value="2" />
+    <label for="star2" title="text">2 stars</label>
+    <input type="radio" id="star1" name="rate" value="1" />
+    <label for="star1" title="text">1 star</label>
+  </div></div><br>
+				';	
+
    			}
    		}
    	?>	
@@ -45,9 +58,20 @@
     		} ?>"
     		 class="img1"><span class="caption"><?php if(isset($_SESSION["user"])) {$m=$_SESSION["user"]; echo"$m"; } else{echo"user";} ?> </span>
 </div>
-<textarea id="kommetararea" rows="4" cols="50" name="comment" form="usrform"></textarea><br>
-<textarea class="hidden" rows="4" cols="50" name="produkt" form="usrform"><?php echo"$s";?></textarea><br>
-<input type="submit" id="submitknapp">
-
-</form>
+<textarea id="kommetararea" rows="4" cols="50" name="comment" form="usrform"></textarea>
+  <div class="rate">
+    <input type="radio" id="star5" name="rate" value="5" />
+    <label for="star5" title="text">5 stars</label>
+    <input type="radio" id="star4" name="rate" value="4" />
+    <label for="star4" title="text">4 stars</label>
+    <input type="radio" id="star3" name="rate" value="3" />
+    <label for="star3" title="text">3 stars</label>
+    <input type="radio" id="star2" name="rate" value="2" />
+    <label for="star2" title="text">2 stars</label>
+    <input type="radio" id="star1" name="rate" value="1" />
+    <label for="star1" title="text">1 star</label>
+  </div>
+  <textarea class="hidden" rows="4" cols="50" name="produkt" form="usrform"><?php echo"$s";?></textarea><br><br>
+  <input type="submit" id="submitknapp">
+  </form>
 </div>

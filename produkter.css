@@ -95,8 +95,6 @@ form#kop{
 }
 #nykommentar{
 	float:right;
-	padding-right:700px; 
-
 
 }
 div.namnicon{
@@ -109,26 +107,27 @@ div.namnicon{
 	
 
 #kommetararea{
-	float:right;
+	float:left;
 }
 .caption {
     display: block;
 }
 #Endakommentar{
 	float:right;
-	padding-right: 700px;
+	
 }
 .textkommentar{
 	border:1px solid grey;
 	width:376px;
 	height:65px;
 	padding-left: 5px;
-	float:right;
+	float:left;
 	background: white;
 }
 #submitknapp{
-	margin-left:328px; 
-	margin-top: 3px;
+position:relative;
+right:41px;
+top:18px;
 }
 .hidden{
 	display: none;
@@ -139,4 +138,44 @@ div.namnicon{
   text-align: right;
   margin-right: 5px;
   font-size: 12px;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+.rate {
+    height: 46px;
+    padding: 0 10px;
+    padding-right: 500px;
+    float:right;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
 }
