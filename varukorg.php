@@ -84,10 +84,11 @@ elseif (isset($_POST["bekrafta"])) {
 	}
 	CloseCon($conn);
 }
-function nextHistId($p){
-    $id_query = "SELECT MAX(Transaktion_ID) FROM historik";
-    $result = $p->query($id_query)->fetch_assoc();
-    return $result['MAX(Transaktion_ID)'] + 1;
+function checkForm()
+{
+	foreach ($_POST as $key => $value) {
+		
+	}
 }
 ?>
 <!DOCTYPE html>

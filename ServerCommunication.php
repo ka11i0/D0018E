@@ -81,3 +81,16 @@ function nextprodId($p){
   $result = $p->query($id_query)->fetch_assoc();
   return $result['MAX(Produkt_ID)'] + 1;
 }
+function nextHistId($p){
+    $id_query = "SELECT MAX(Transaktion_ID) FROM historik";
+    $result = $p->query($id_query)->fetch_assoc();
+    return $result['MAX(Transaktion_ID)'] + 1;
+}
+function checkType($var, $type){
+	if (gettype($var) == $type) {
+		return true;
+	}
+	else{
+		return false;
+	}
+}
