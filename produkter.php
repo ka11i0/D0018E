@@ -57,8 +57,10 @@ $p=OpenCon();
 if (isset($_GET['comment'])) {
   if (isset($_SESSION["user"])) 
     {
+      
       if ($_GET['comment']!="") {
             $g=$_GET['comment'];
+            $a=$_GET['rate'];
             $Kom_id=nextCommentId($p);
             $prod = $_GET['produkt'];
             $s=$_SESSION["user"];
@@ -68,8 +70,8 @@ if (isset($_GET['comment'])) {
             $userid_result = $p->query($userid_query)->fetch_assoc();
             $user_idd = $userid_result["Person_ID"];
             $prod_idd = $prod_result["Produkt_ID"];
-            $query3= "INSERT INTO `kommentarer` (`Kommentar_ID`, `Person_ID`, `Produkt_ID`, `kommentar`, `Datum`) VALUES ('$Kom_id', '$user_idd', '$prod_idd', '$g', CURRENT_DATE())";
-            $p->query($query3);
+            $query4="INSERT INTO `kommentarer` (`Kommentar_ID`, `Person_ID`, `Produkt_ID`, `kommentar`, `Datum`, `rating`) VALUES ('$Kom_id', '$user_idd', '$prod_idd', '$g', CURRENT_DATE(), '$a')";
+            $p->query($query4); 
             header('Location: produkter.php?produkt='."$prod".''); //annars om du refresha uppdateras sidan om igen för för get requesten är kvar i headern.
         }
       }     
@@ -227,6 +229,7 @@ if(!$admin)
 if(isset($_GET['produkt']))
    		{
    		  $s=$_GET['produkt'];
+   		  $sql_query9 ="SELECT AVG(rating) AS AVG FROM kommentarer WHERE Produkt_ID=(SELECT Produkt_ID from produkt where Produktnamn='{$s}')";
    		  $sql_query2 ="SELECT * FROM `produkt`WHERE Produktnamn='{$s}' "; // hämta all produkt info
    		  $q=Outputproducts($sql_query2,$p);
    		  $row = $q->fetch_assoc();
@@ -234,12 +237,16 @@ if(isset($_GET['produkt']))
    		  $b=$row["Pris"];
    		  $c=$row["Saldo"];
    		  $d=$row["Produktbeskrivning"];
-        $f=$row["Produkt_ID"];
+          $f=$row["Produkt_ID"];
+          $res = $p->query($sql_query9)->fetch_assoc();
+          $z=$res["AVG"];
+          if($z==null){
+          	$z=0;
+          }
    		  
    		  echo '<div id="omProdukt">'."$s".'<br><br>
 			Pris: $'."$b".'.00<br><br>'
-			."$d".'<br><br>
-			Genomsnittlig rating: 3.5/5 icon<br><br>
+			."$d".'<br><br> <div id="star">★</div><div id="grade">'."$z".'/5 </div><br><br>
 			<form id="kop" method="post">
 				Antal:
 				<input type="number" name="amount" min="1" value="1">
