@@ -57,10 +57,8 @@ $p=OpenCon();
 if (isset($_GET['comment'])) {
   if (isset($_SESSION["user"])) 
     {
-      
       if ($_GET['comment']!="") {
             $g=$_GET['comment'];
-            $a=$_GET['rate'];
             $Kom_id=nextCommentId($p);
             $prod = $_GET['produkt'];
             $s=$_SESSION["user"];
@@ -70,8 +68,8 @@ if (isset($_GET['comment'])) {
             $userid_result = $p->query($userid_query)->fetch_assoc();
             $user_idd = $userid_result["Person_ID"];
             $prod_idd = $prod_result["Produkt_ID"];
-            $query4="INSERT INTO `kommentarer` (`Kommentar_ID`, `Person_ID`, `Produkt_ID`, `kommentar`, `Datum`, `rating`) VALUES ('$Kom_id', '$user_idd', '$prod_idd', '$g', CURRENT_DATE(), '$a')";
-            $p->query($query4); 
+            $query4="INSERT INTO `kommentarer` (`Kommentar_ID`, `Person_ID`, `Produkt_ID`, `kommentar`, `Datum`) VALUES ('$Kom_id', '$user_idd', '$prod_idd', '$g', CURRENT_DATE())";
+            $p->query($query4);
             header('Location: produkter.php?produkt='."$prod".''); //annars om du refresha uppdateras sidan om igen för för get requesten är kvar i headern.
         }
       }     
@@ -82,6 +80,40 @@ if (isset($_GET['comment'])) {
 }
 CloseCon($p);
 }
+function uppdaterarating(){
+$p=OpenCon(); 
+if (isset($_GET['rate'])) {
+  if (isset($_SESSION["user"])) 
+    { 
+            $a=$_GET['rate'];
+            $prod = $_GET['produkt'];
+            $s=$_SESSION["user"];
+            $prod_query = "SELECT Produkt_ID FROM produkt WHERE Produktnamn='$prod'";
+            $userid_query = "SELECT Person_ID FROM konto WHERE Namn='$s'";
+            $prod_result = $p->query($prod_query)->fetch_assoc();
+            $userid_result = $p->query($userid_query)->fetch_assoc();
+            $user_idd = $userid_result["Person_ID"];
+            $prod_idd = $prod_result["Produkt_ID"];
+            $quant_query = "SELECT rating FROM rating WHERE Person_ID='$user_idd' AND Produkt_ID='$prod_idd'";
+       	    $quant_result = $p->query($quant_query);
+            if(mysqli_num_rows($quant_result)>0){	
+            	$query4= "UPDATE `rating` SET `rating`='$a' WHERE Person_ID='$user_idd' AND Produkt_ID='$prod_idd'";
+            }
+            else{
+            	$query4= "INSERT INTO `rating` (`Person_ID`, `Produkt_ID`, `rating`) VALUES ('$user_idd', '$prod_idd', '$a')";
+            }
+            $p->query($query4); 
+            header('Location: produkter.php?produkt='."$prod".''); //annars om du refresha uppdateras sidan om igen för för get requesten är kvar i headern.
+      }     
+  else
+    {
+    echo "<script type='text/javascript'>alert('Du måste vara inloggad för att kunna betygsätta produkten');</script>";
+    }
+}
+CloseCon($p);
+}
+
+
 function tabortprodukt(){
 $p=OpenCon();
 if(isset($_GET['uppdatera']))
@@ -161,6 +193,7 @@ uploadfile();
 */
 hanteravarukorg();
 uppdaterakommentarer();
+uppdaterarating();
 tabortprodukt();
 läggtillprodukt();
 ?>
@@ -229,8 +262,11 @@ if(!$admin)
 if(isset($_GET['produkt']))
    		{
    		  $s=$_GET['produkt'];
-   		  $sql_query9 ="SELECT AVG(rating) AS AVG FROM kommentarer WHERE Produkt_ID=(SELECT Produkt_ID from produkt where Produktnamn='{$s}')";
+   		  $sql_query9 ="SELECT AVG(rating) AS AVG FROM rating WHERE Produkt_ID=(SELECT Produkt_ID from produkt where Produktnamn='{$s}')";
    		  $sql_query2 ="SELECT * FROM `produkt`WHERE Produktnamn='{$s}' "; // hämta all produkt info
+   		  $sql_query89 ="SELECT COUNT(rating) AS ANTAL FROM rating WHERE Produkt_ID=(SELECT Produkt_ID from produkt where Produktnamn='{$s}');";
+   		  $antalrating = $p->query($sql_query89)->fetch_assoc();
+   		  $antal= $antalrating["ANTAL"];
    		  $q=Outputproducts($sql_query2,$p);
    		  $row = $q->fetch_assoc();
    		  $a=$row["Img_filsökväg"];
@@ -246,7 +282,7 @@ if(isset($_GET['produkt']))
    		  
    		  echo '<div id="omProdukt">'."$s".'<br><br>
 			Pris: $'."$b".'.00<br><br>'
-			."$d".'<br><br> <div id="star">★</div><div id="grade">'."$z".'/5 </div><br><br>
+			."$d".'<br><br> <div id="star">★</div><div id="grade">'."$z".'/5 betygsatt av '."$antal".' personer</div><br><br>
 			<form id="kop" method="post">
 				Antal:
 				<input type="number" name="amount" min="1" value="1">

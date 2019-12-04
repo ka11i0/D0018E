@@ -51,3 +51,14 @@ CREATE TABLE kommentarer
 			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
 			PRIMARY KEY(Kommentar_ID)
 );
+);
+
+CREATE TABLE rating
+			(
+			Person_ID INT(20)NOT NULL , 
+			Produkt_ID INT NOT NULL,
+			rating int(1) NOT NULL,
+			FOREIGN KEY(Person_ID) REFERENCES konto(Person_ID) ON DELETE CASCADE,
+			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
+			PRIMARY KEY(Person_ID,Produkt_ID)
+);
