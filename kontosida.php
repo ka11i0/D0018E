@@ -107,7 +107,7 @@
                         else {
                             echo "Inget köpt ännu.";
                         }
-                        $current_queue = $query_data[0][0];
+                        $current_queue = NULL;
                         $count = 0;
                         for ($i=0; $i < $index; $i++) {
                             if ($current_queue == $query_data[$i][0]) {
@@ -123,7 +123,7 @@
                             echo "<th>".$query_data[$i][3]."</th>";
                             echo "<th>".$query_data[$i][2]."</th>";
                             echo "<th>".$query_data[$i][2]*$query_data[$i][3]."</th>";
-                            if ($count<2) {
+                            if ($count==0 || $count<1) {
                                 echo "<th>".$query_data[$i][4]."</th>";
                                 echo "<th>".$query_data[$i][5]."</th>";
                             }
