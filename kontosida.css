@@ -39,3 +39,19 @@ button {
 button:hover {
   opacity: 0.8;
 }
+table{
+  border: 1px solid black;
+  border-collapse: collapse;
+  margin: auto;
+  text-align: left;
+}
+th {
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+tr.bottom {
+  border-bottom: 1px solid black;
+}
+tr.top {
+  border-top: 1px solid black;
+}

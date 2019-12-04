@@ -44,21 +44,28 @@ if (isset($_POST["uppdatera"])) {
 }
 elseif (isset($_POST["bekrafta"])) {
 	$conn = OpenCon();
+	//sätt variablerna som ska in i historik
 	$hist_id = nextHistId($conn);
 	$date = date("Y-m-d");
 	$time = date("H:i:s");
-	$information_query = "SELECT varukorg.Produkt_ID, varukorg.quantity, produkt.Saldo FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
+	$nytt_saldo = $_SESSION["saldo"];
+	$information_query = "SELECT varukorg.Produkt_ID, varukorg.quantity, produkt.Saldo, produkt.Pris FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
 	try{
 		$conn->begin_transaction();
 		$result = $conn->query($information_query);
 		while($row=$result->fetch_assoc()) {
+			//kolla så att lagersaldo räcker till köpet
 			if ($row["Saldo"]>=$row["quantity"]) {
 				$Produkt_ID = $row["Produkt_ID"];
 				$quant = $row["quantity"];
+				//nytt konto saldo för kontot
+				$nytt_saldo = $nytt_saldo - $row["Pris"] * $row["quantity"];
+				//nytt lager saldo för produkten
 				$new_saldo = $row["Saldo"] - $quant;
 				$purchase_query = "INSERT INTO historik (Transaktion_ID, Person_ID, Datum, Tid, Produkt_ID, quantity) VALUES ('$hist_id', '$person_id','$date', '$time','$Produkt_ID', '$quant')";
 				$delete_varukorg_query = "DELETE FROM varukorg WHERE Person_ID = '$person_id' AND Produkt_ID = '$Produkt_ID'";
 				$update_saldo_query = "UPDATE produkt SET saldo = '$new_saldo' WHERE Produkt_ID = '$Produkt_ID'";
+				$update_pengar_query = "UPDATE konto SET Saldo = '$nytt_saldo' WHERE Person_ID = '$person_id'";
 				if (!$conn->query($update_saldo_query)) {
 					echo "Error: " . $update_saldo_query . "<br>" . $conn->error;
 					throw new Exception("update_saldo_query error");
@@ -71,24 +78,28 @@ elseif (isset($_POST["bekrafta"])) {
 					echo "Error: " . $delete_varukorg_query . "<br>" . $conn->error;
 					throw new Exception("delete_varukorg_query error");
 				}
-				$conn->commit();
+				if ($nytt_saldo < 0) {
+					throw new Exception("saldo error");
+				}
+				else {
+					if (!$conn->query($update_pengar_query)) {
+						echo "Error: " . $update_pengar_query . "<br>" . $conn->error;
+						throw new Exception("update_pengar_query error");
+					}
+				}
 			}
 			else {
 				throw new Exception('Lagersaldot kan ej täcka valda varor.');
 			}
 		}
+		$_SESSION["saldo"] = $nytt_saldo;
+		$conn->commit();
 	}
 	catch (Exception $e){
 		$conn->rollback();
 		echo "<script type='text/javascript'>alert('".$e->getMessage()."');</script>";
 	}
 	CloseCon($conn);
-}
-function checkForm()
-{
-	foreach ($_POST as $key => $value) {
-		
-	}
 }
 ?>
 <!DOCTYPE html>
@@ -100,20 +111,20 @@ function checkForm()
 </head>
 <body>
 	<?php include_once 'navbar.php'; ?>
-	<form method="post">
-		<table>
-			<tr id="title">
-			    <th>Namn</th>
-			    <th>Antal (st)</th>
-			    <th>Pris per enhet (kr)</th>
-			    <th>Lagersaldo (st)</th>
-			</tr>
 			<?php
 				$total_kostnad = 0;
 				$table_query = "SELECT varukorg.quantity, produkt.Produktnamn, produkt.Pris, produkt.Saldo FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
 				$conn = OpenCon();
 				$result = $conn->query($table_query);
 				if ($result->num_rows>0) {
+					echo "<form method='post'>
+							<table>
+								<tr id='title'>
+								    <th>Namn</th>
+								    <th>Antal (st)</th>
+								    <th>Pris per enhet (kr)</th>
+								    <th>Lagersaldo (st)</th>
+								</tr>";
 					while($row = $result->fetch_assoc()) {
 						echo "<tr>";
 		    			echo "<th>".$row["Produktnamn"]."</th>";
@@ -141,9 +152,9 @@ function checkForm()
 		    		CloseCon($conn);
 		    	}
 		    	else {
-		    		echo "</table>;";
+		    		echo "</table>";
+		    		echo "</form>";
 		    	}
 			?>
-	</form>
 </body>
 </html>

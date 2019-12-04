@@ -86,11 +86,3 @@ function nextHistId($p){
     $result = $p->query($id_query)->fetch_assoc();
     return $result['MAX(Transaktion_ID)'] + 1;
 }
-function checkType($var, $type){
-	if (gettype($var) == $type) {
-		return true;
-	}
-	else{
-		return false;
-	}
-}

@@ -97,9 +97,9 @@ $p=OpenCon();
 $info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning');
 if(CheckPOST($info))
 {
-      $info[0] = $_POST['Produktnamn'];
+    $info[0] = $_POST['Produktnamn'];
 	  $info[1] = $_POST['Img_filsökväg'];
-     $info[2] = $_POST['Pris'];
+    $info[2] = $_POST['Pris'];
 	  $info[3] = $_POST['Saldo'];
 	  $info[4] = $_POST['Produktbeskrivning'];
 	  $id = nextprodId($p);
