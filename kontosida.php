@@ -75,10 +75,10 @@
                         <button type="submit">Uppdatera</button>
                     </form>
     		    </div>
-                <div id="kolumn2">
-                    <p id="headline"><h3>Köp historik</h3></p>
-                    <div id="scroll">
                     <?php
+                        echo '<div id="kolumn2">
+                            <p id="headline"><h3>Köp historik</h3></p>
+                            <div id="scroll">';
                         $table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, produkt.Produktnamn, produkt.Pris FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
                         $conn = OpenCon();
                         $result = $conn->query($table_query);
@@ -139,7 +139,7 @@
                         CloseCon($conn);
                     ?>
                 </div>
-                </div>
+            </div>
         </div>
 	</body>
 </html>
