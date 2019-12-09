@@ -48,7 +48,7 @@
         <div id="box">
             <div id="kolumn">
                 <form action="<?php $_PHP_SELF ?>" method="post">
-                    <p id="headline">Kontouppgifter</p>
+                    <p id="headline"><h3>Kontouppgifter</h3></p>
                         <label for="email"><b>Email</b></label>
                         <input type="email" value="<?php echo $_SESSION["email"] ?>" name="mail" required>
 
@@ -76,7 +76,7 @@
                     </form>
     		    </div>
                 <div id="kolumn2">
-                    <p id="headline">Köp historik</p>
+                    <p id="headline"><h3>Köp historik</h3></p>
                     <div id="scroll">
                     <?php
                         $table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, produkt.Produktnamn, produkt.Pris FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
@@ -85,14 +85,17 @@
                         $index = 0;
                         if ($result->num_rows>0) {
                                 echo "<table>
-                                <tr id='title' class='bottom'>
-                                    <th>Namn</th>
-                                    <th>Antal (st)</th>
-                                    <th>Pris per enhet (kr)</th>
-                                    <th>Totalkostnad (kr)</th>
-                                    <th>Datum</th>
-                                    <th>Klockslag</th>
-                                </tr>";
+                                <thead>
+                                    <tr id='title' class='bottom'>
+                                        <th>Namn</th>
+                                        <th>Antal (st)</th>
+                                        <th>Pris per enhet (kr)</th>
+                                        <th>Totalkostnad (kr)</th>
+                                        <th>Datum</th>
+                                        <th>Klockslag</th>
+                                    </tr>
+                                </thead>";
+                                echo "<tbody>";
                             while($row = $result->fetch_assoc()) {
                                 $query_data[$index][0] = $row["Transaktion_ID"];
                                 $query_data[$index][1] = $row["Produktnamn"];
@@ -132,9 +135,10 @@
                             }
                             echo "</tr>";
                         }
+                        echo "</tbody></table>";
                         CloseCon($conn);
                     ?>
-                    <div id="scroll">
+                </div>
                 </div>
         </div>
 	</body>

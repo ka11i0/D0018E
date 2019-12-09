@@ -1,7 +1,6 @@
 #box {
     display: flex;
     width: 75%;
-    height: calc(100%-60px);
     margin: auto;
     background-color: #DDDDDD;
 
@@ -24,6 +23,7 @@
 #scroll{
   height: 370px;
   overflow: auto;
+  border: 1px solid black;
 }
 
 form {
@@ -54,7 +54,6 @@ button:hover {
   opacity: 0.8;
 }
 table{
-  border: 1px solid black;
   border-collapse: collapse;
   margin: auto;
   text-align: left;

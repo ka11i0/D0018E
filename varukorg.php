@@ -143,17 +143,17 @@ elseif (isset($_POST["bekrafta"])) {
 		    			$total_kostnad += $row["quantity"]*$row["Pris"];
 		    		}
 		    		echo "<tr class='lastrow'>";
-		    		echo "<th id='lr_left'>Total kostnad:</th>";
-		    		echo "<th id='lr_right'>".$total_kostnad." kr</th>";
+		    		echo "<th colspan='2'>Total kostnad:</th>";
+		    		echo "<th colspan='2'>".$total_kostnad." kr</th>";
 		    		echo "</tr>";
 		    		echo "</table>";
-		    		echo "<input type='submit' name='uppdatera' value='Uppdatera kundkorg'>";
-		    		echo "<input type='submit' name='bekrafta' value='Köp'>";
+		    		echo "<button name='uppdatera'>Uppdatera kundkorg</button>";
+		    		echo "<button name='bekrafta'>Köp</button>";
+		    		echo "</form>";
 		    		CloseCon($conn);
 		    	}
 		    	else {
-		    		echo "</table>";
-		    		echo "</form>";
+		    		echo "<h3 style='text-align:center'>Börja handla för att saker ska visas här.</h3>";
 		    	}
 			?>
 </body>
