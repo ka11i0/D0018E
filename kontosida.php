@@ -47,9 +47,8 @@
         <?php include_once 'navbar.php'; ?>
         <div id="box">
             <div id="kolumn">
-                
                 <form action="<?php $_PHP_SELF ?>" method="post">
-                <p id="headline">Kontouppgifter</p>
+                    <p id="headline">Kontouppgifter</p>
                         <label for="email"><b>Email</b></label>
                         <input type="email" value="<?php echo $_SESSION["email"] ?>" name="mail" required>
 
@@ -72,20 +71,20 @@
                         <label for="tel"><b>Telefonnummer</b></label>
                         <input type="telnum" value="<?php echo $_SESSION["telnr"] ?>" name="telnum" required>
                         </div>
-                        
+                            
                         <button type="submit">Uppdatera</button>
-                </form>
-                
-		    </div>
-
-            <div id="kolumn">
+                    </form>
+    		    </div>
+                <div id="kolumn2">
+                    <p id="headline">Köp historik</p>
+                    <div id="scroll">
                     <?php
                         $table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, produkt.Produktnamn, produkt.Pris FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
                         $conn = OpenCon();
                         $result = $conn->query($table_query);
                         $index = 0;
                         if ($result->num_rows>0) {
-                            echo "<table>
+                                echo "<table>
                                 <tr id='title' class='bottom'>
                                     <th>Namn</th>
                                     <th>Antal (st)</th>
@@ -132,10 +131,12 @@
                                 echo "<th></th>";
                             }
                             echo "</tr>";
+                            echo "</table>";
                         }
                         CloseCon($conn);
                     ?>
-            </div>
+                    <div id="scroll">
+                </div>
         </div>
 	</body>
 </html>

@@ -1,10 +1,19 @@
 #box {
     display: flex;
+    width: 75%;
+    height: calc(100%-60px);
+    margin: auto;
+    background-color: #DDDDDD;
+
 }
 
 #kolumn {
-    flex: 50%;
-    margin: 0px 30px;
+    width: 30%;
+    margin: 30px 30px;
+}
+#kolumn2 {
+    width: 70%;
+    margin: 30px 30px;
 }
 
 #headline {
@@ -12,8 +21,13 @@
     margin-right: auto;
 }
 
+#scroll{
+  height: 370px;
+  overflow: auto;
+}
+
 form {
-    width: 300px;
+    width: 310px;
     border: none;
 }
 
@@ -44,6 +58,7 @@ table{
   border-collapse: collapse;
   margin: auto;
   text-align: left;
+  width: 700px;
 }
 th {
   border-left: 1px solid black;
