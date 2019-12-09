@@ -131,7 +131,6 @@
                                 echo "<th></th>";
                             }
                             echo "</tr>";
-                            echo "</table>";
                         }
                         CloseCon($conn);
                     ?>
