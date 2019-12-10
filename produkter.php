@@ -4,7 +4,6 @@ include 'ServerCommunication.php';
 session_start();
 
 $admin=false;
-
 if(isset($_SESSION["user"]))
    		{
         	If($_SESSION["user"] == "admin")
@@ -75,7 +74,7 @@ if (isset($_GET['comment'])) {
       }     
   else
     {
-    echo "<script type='text/javascript'>alert('Du måste vara inloggad för att kunna kommentera');</script>";
+    echo "<script type='text/javascript'>alert('Du måste vara inloggad för att kunna kommentera och betygsätta varan');</script>";
     }
 }
 CloseCon($p);
@@ -105,10 +104,6 @@ if (isset($_GET['rate'])) {
             $p->query($query4); 
             header('Location: produkter.php?produkt='."$prod".''); //annars om du refresha uppdateras sidan om igen för för get requesten är kvar i headern.
       }     
-  else
-    {
-    echo "<script type='text/javascript'>alert('Du måste vara inloggad för att kunna betygsätta produkten');</script>";
-    }
 }
 CloseCon($p);
 }
@@ -126,76 +121,43 @@ if(isset($_GET['uppdatera']))
 }
 CloseCon($p);
 }
-function läggtillprodukt(){
+function läggtillochuppdateraprodukt(){
 $p=OpenCon();
-$info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning');
+$info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning','funk');
 if(CheckPOST($info))
-{
-   	  $info[0] = $_POST['Produktnamn'];
+{	  
+	  $info[0] = $_POST['Produktnamn'];
 	  $info[1] = $_POST['Img_filsökväg'];
       $info[2] = $_POST['Pris'];
 	  $info[3] = $_POST['Saldo'];
 	  $info[4] = $_POST['Produktbeskrivning'];
-	  $id = nextprodId($p);
-      $squery = "INSERT INTO produkt(Produktnamn,Produkt_ID,Img_filsökväg,Pris,Saldo,Produktbeskrivning) VALUES ('$info[0]','$id','$info[1]','$info[2]','$info[3]','$info[4]')";
-	  $p->query($squery);
+	  $val = $_POST['funk'];
+	  if($val == 1)
+	  {
+		  $id = nextprodId($p);
+	      $squery = "INSERT INTO produkt(Produktnamn,Produkt_ID,Img_filsökväg,Pris,Saldo,Produktbeskrivning) VALUES ('$info[0]','$id','$info[1]','$info[2]','$info[3]','$info[4]')";
+		   if(!($p->query($squery)))
+		   	{
+	      		echo "<script type='text/javascript'>alert('kan inte läggas till då produkten redan finns uppdatera den istället');</script>";
+	  	 	}
+  	  }
+  	  else
+  	  {		
+  	  		$id = $_POST['id'];
+  	  		echo "$id";
+  	  		$squery = "UPDATE `produkt` SET `Produktnamn` = '$info[0]', `Img_filsökväg` = '$info[1]', `Pris` = '$info[2]', `Saldo` = '$info[3]', `Produktbeskrivning` = '$info[4]' WHERE `produkt`.`Produkt_ID` = '$id';";
+  	  		$p->query($squery);
+  	  		
+  	  }
 }
 CloseCon($p);
 }
-/*
-function uploadfile(){ //yoink
-echo exec('whoami'); 
-$target_dir = "";
-$target_file = $target_dir . basename($_FILES["Img_filsökväg"]["name"]);
-$uploadOk = 1;
-$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-// Check if image file is a actual image or fake image
-if(isset($_POST["submit"])) {
-    $check = getimagesize($_FILES["Img_filsökväg"]["tmp_name"]);
-    if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-    }
-}
-// Check if file already exists
-if (file_exists($target_file)) {
-    echo "Sorry, file already exists.";
-    $uploadOk = 0;
-}
-// Check file size
-if ($_FILES["Img_filsökväg"]["size"] > 500000) {
-    echo "Sorry, your file is too large.";
-    $uploadOk = 0;
-}
-// Allow certain file formats
-if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-&& $imageFileType != "gif" ) {
-    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-    $uploadOk = 0;
-}
-// Check if $uploadOk is set to 0 by an error
-if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-} else {
-    if (move_uploaded_file($_FILES["Img_filsökväg"]["tmp_name"], $target_file)) {
-        echo "The file ". basename( $_FILES["Img_filsökväg"]["name"]). " has been uploaded.";
-    } else {
-        echo "Sorry, there was an error uploading your file.";
-    }
-}
-}
 
-uploadfile();
-*/
 hanteravarukorg();
 uppdaterakommentarer();
 uppdaterarating();
 tabortprodukt();
-läggtillprodukt();
+läggtillochuppdateraprodukt();
 ?>
 <!DOCTYPE html>
 <html>
@@ -210,54 +172,93 @@ läggtillprodukt();
 	<div id="produktlänkar">
 	<?php 
 		$p=OpenCon();
-		$sql_query1 ="SELECT Produktnamn FROM `produkt`"; // hämta all produkt info
+		$sql_query1 ="SELECT * FROM `produkt`"; // hämta all produkt info
    		$q=Outputproducts($sql_query1,$p);
+   		$allID = array("toggla");
    		if($q != null) 
    		{	
    			while($row = $q->fetch_assoc())
    			{
    				$s=$row["Produktnamn"]; 
+   				$id=$row["Produkt_ID"];
+   				$a=$row["Img_filsökväg"];
+   		  		$b=$row["Pris"];
+   		 	    $c=$row["Saldo"];
+   		  		$d=$row["Produktbeskrivning"];
+   				$allID[]=$id;
    				$x="";
+   				
    				if($admin){
-   					$x='<a href="produkter.php?uppdatera='."$s".'"><button>Ta bort</button></a>'; //lägg till här
+   					$x='<a href="produkter.php?uppdatera='."$s".'"><button>Ta bort</button></a>
+   					<button onclick="updateform('."$id".')"type="button" id="toggla3">Uppdatera</button>
+					 <form id="'."$id".'" action="produkter.php" method="post" enctype="multipart/form-data" style="display:none;"><br>
+						<label for="x"><b>varunamn</b></label>
+						<input type="text" Value="'."$s".'" name="Produktnamn" required><br>
+						<label for="x"><b>Produktbild</b></label>
+					    <input type="text" Value="'."$a".'" name="Img_filsökväg" required><br>
+						<label for="x"><b>Pris</b></label>
+						<input type="text" Value="'."$b".'" name="Pris" required><br>
+						<label for="x"><b>Saldo</b></label>	
+						<input type="text" Value="'."$c".'" name="Saldo" required><br>
+						<label for="x"><b>Produktbeskrivning</b></label>
+						<input type="text" Value="'."$d".'" name="Produktbeskrivning" required><br>
+						<input type="funktion" class="hidden" name="funk" value="2" />
+						<input type="IDEntit" class="hidden" name="id" value="'."$id".'" />
+						<button type="submit">Uppdatera</button>
+					 </form>'; //lägg till här
    				}
    				echo '<a href="produkter.php?produkt='."$s".'">'."$s".'</a> &nbsp;'."$x".'<br><br>'; //kanske ta bort space och ha produktbild istället
    			}
+
    		}
    	?>	
-   <button onclick="updateform()"type="button" id="toggla2">Ny vara</button>
-	<form id="toggla" action="produkter.php" method="post" enctype="multipart/form-data"><br>
+<button onclick="updateform('toggla')"type="button" id="toggla2">Ny vara</button>
+ <form id="toggla" action="produkter.php" method="post" enctype="multipart/form-data"><br>
 	<label for="x"><b>varunamn</b></label>
 	<input type="text" placeholder="Välj namn" name="Produktnamn" required><br>
 	<label for="x"><b>Produktbild</b></label>
-    <input type="file" name="Img_filsökväg"><br>
+    <input type="text" placeholder="Ange filsökväg" name="Img_filsökväg" required><br>
 	<label for="x"><b>Pris</b></label>
 	<input type="text" placeholder="Välj ett pris" name="Pris" required><br>
 	<label for="x"><b>Saldo</b></label>
 	<input type="text" placeholder="Saldo" name="Saldo" required><br>
 	<label for="x"><b>Produktbeskrivning</b></label>
 	<input type="text" placeholder="beskriv produkten" name="Produktbeskrivning" required><br>
+	<input type="funktion" class="hidden" name="funk" value="1" />
 	<button type="submit">Lägg till</button>
-</form>
+ </form>	
 </div>
-<script> document.getElementById("toggla").style.display = "none" </script>
+<script> document.getElementById("toggla").style.display = "none"</script>
+
 <div id="bildotext">
 <script>
-function updateform() { //ica basic
-  var x = document.getElementById("toggla");
-  if (x.style.display === "none") {
-    x.style.display = "block"; 
-  } else {
-    x.style.display = "none";
-    
-  }
-}     
+function updateform(which) 
+{ 
+var g = which;
+var IDs= <?php echo json_encode($allID);?>;
+for(var i=0;i<IDs.length;i++)
+{		
+	if(IDs[i]==g)
+	{
+		var x = document.getElementById(g);
+		if (x.style.display === 'none') 
+			{
+				x.style.display = 'block';
+			} 
+	    else 
+			{
+		    	x.style.display = 'none';
+			}
+	}	
+}
+}
 </script>
-<?php    	
+<?php    
 if(!$admin)
 	{
 		echo '<script> document.getElementById("toggla2").style.display = "none" </script>';
-    }    	
+    } 	
+
 
 if(isset($_GET['produkt']))
    		{
@@ -279,10 +280,12 @@ if(isset($_GET['produkt']))
           if($z==null){
           	$z=0;
           }
-   		  
+   		  $z=round($z);
+
    		  echo '<div id="omProdukt">'."$s".'<br><br>
-			Pris: $'."$b".'.00<br><br>'
-			."$d".'<br><br> <div id="star">★</div><div id="grade">'."$z".'/5 betygsatt av '."$antal".' personer</div><br><br>
+			Pris: $'."$b".'.0<br><br>
+			I lager: '."$c".' St<br><br>
+			'."$d".'<br><br> <div id="star">★</div><div id="grade">'."$z".'/5 betygsatt av '."$antal".' personer</div><br><br>
 			<form id="kop" method="post">
 				Antal:
 				<input type="number" name="amount" min="1" value="1">
@@ -292,7 +295,7 @@ if(isset($_GET['produkt']))
 			</form>
 		</div>		
 		<div id="prodImg">
-			<img src="">
+			<img src="bilder/'."$a".'" id="produkten">
 		</div>';
     include_once 'kommentarer.php';
     } 

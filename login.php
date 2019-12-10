@@ -19,7 +19,7 @@
 	    }
  		else 
 	 	{
-	 		echo "Användaren eller Lösenordet är fel!";
+	 		echo "<script type='text/javascript'>alert('Användarnamnet eller lösenordet du angivit är felaktigt');</script>";
 	 	}
     }
 

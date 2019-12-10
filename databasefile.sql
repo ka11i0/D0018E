@@ -5,7 +5,8 @@ CREATE TABLE produkt
               Pris	INT,
               Saldo	INT, 
               Produktbeskrivning VARCHAR(20), 						
-PRIMARY KEY (Produkt_ID)
+PRIMARY KEY(Produkt_ID),
+UNIQUE(Produktnamn)
 );
 CREATE TABLE konto
 		    (Person_ID INT(20),

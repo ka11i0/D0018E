@@ -15,10 +15,10 @@
    		 	 $c=$row["kommentar"];
    		  	 $d=$row["Datum"];
    		  	 if($b=="admin"){
-   		  	 	$x="admin.png";
+   		  	 	$x="bilder/admin.png";
    		  	 }
    		  	 else{
-   		  	 	$x="user.png";
+   		  	 	$x="bilder/user.png";
    		  	 }
 
    				echo '
@@ -41,14 +41,14 @@
 <div class="namnicon">
  	<img src="<?php if(isset($_SESSION["user"]) and $_SESSION["user"] =="admin") 
    		{	
-    		echo"admin.png";		
+    		echo"bilder/admin.png";		
    		}
     	else{
-    		 echo"user.png";
+    		 echo"bilder/user.png";
     		} ?>"
     		 class="img1"><span class="caption"><?php if(isset($_SESSION["user"])) {$m=$_SESSION["user"]; echo"$m"; } else{echo"user";} ?> </span>
 </div>
-<textarea id="kommetararea" rows="4" cols="50" name="comment" form="usrform"></textarea>
+<textarea id="kommetararea" rows="4" cols="50" name="comment" form="usrform" placeholder="Vad är din åsikt?"></textarea>
   <div class="rate">
     <input type="radio" id="star5" name="rate" value="5" />
     <label for="star5" title="text">5 stars</label>
