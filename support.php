@@ -66,7 +66,7 @@ session_start();
 									$seq = $result["COUNT(*)"];	
 								}	
 							}
-							$historik_query = "SELECT * FROM historik WHERE Person_ID = ".$user_id;
+							$historik_query = "SELECT * FROM historik WHERE Person_ID = ".$user_id." ORDER BY Transaktion_ID DESC, Produkt_ID ASC";
 
 							$n_query = "SELECT COUNT(*) FROM historik WHERE Person_ID = ".$user_id;
 							$result = $conn->query($n_query)->fetch_assoc();
@@ -74,6 +74,7 @@ session_start();
 							$konto_query = "SELECT Saldo FROM konto WHERE Person_ID = ".$user_id;
 							$result = $conn->query($konto_query)->fetch_assoc();
 							$user_saldo = $result["Saldo"];
+							$index=0;
 							try{
 								$conn->begin_transaction();
 								$result = $conn->query($historik_query);
@@ -83,10 +84,18 @@ session_start();
 									$produkt_saldo = $produkt_result["Saldo"];
 									$produkt_pris = $produkt_result["Pris"];
 									$produkt_id = $produkt_result["Produkt_ID"];
-									if ($row["quantity"]<$info[$index][2]){
-										//antal ökning, pengasaldo minskning + lagersaldo minskning
+									if ($row["status"]!=$info[$index][3]){
+										//update msg
+										$message = $info[$index][3];
+										$tran_id = $info[$index][0];
+										$msg_query = "UPDATE historik SET status = '$message' WHERE Transaktion_ID='$tran_id' AND Produkt_ID = '$produkt_id'";
+										print_r($msg_query);
+										echo "<br>";
+										if (!$conn->query($msg_query)) {
+											throw new Exception("update status message error");
+										}
 									}
-									elseif ($info[$index][2]==0) {
+									if ($info[$index][2]==0) {
 										//refund, pengasaldo ökning + lagersaldo ökning
 										$new_lagersaldo = $row["quantity"] + $produkt_saldo;
 										$new_pengasaldo = $row["quantity"] * $produkt_pris + $user_saldo;
@@ -96,6 +105,8 @@ session_start();
 										if (!$conn->query($delete_query) || !$conn->query($update_konto_query) || !$conn->query($update_produkt_query)) {
 											throw new Exception("remove historik row error");
 										}
+										print_r($delete_query);
+										echo "<br>";
 
 									}
 									elseif ($row["quantity"]>$info[$index][2]) {
@@ -108,26 +119,36 @@ session_start();
 										$update_produkt_query = "UPDATE produkt SET Saldo = ".$new_lagersaldo." WHERE Produkt_ID = ".$produkt_id;
 										print_r($update_historik_query);
 										echo "<br>";
-										//print_r($update_konto_query);
-										echo "<br>";
 										//print_r($update_produkt_query);
-										if (!$conn->query($update_historik_query)) {
+										if (!$conn->query($update_historik_query) || !$conn->query($update_konto_query) || !$conn->query($update_produkt_query)) {
 											throw new Exception("update historik row error");
 										}
 									}
-									if ($row["status"]!=$info[$index][3]){
-										//update msg
-										$message = $info[$index][3];
-										$tran_id = $info[$index][0];
-										$msg_query = "UPDATE historik SET status = '$message' WHERE Transaktion_ID='$tran_id' AND Produkt_ID = '$produkt_id'";
-										print_r($msg_query);
+									elseif ($row["quantity"]<$info[$index][2]) {
+										//antal ökning, pengasaldo minskning + lagersaldo minskning
+										$new_lagersaldo = $produkt_saldo - $info[$index][2] + $row["quantity"];
+										if ($new_lagersaldo<0) {
+											throw new Exception("lagersaldo error");
+										}
+										$new_pengasaldo = $user_saldo - ($info[$index][2] - $row["quantity"]) * $produkt_pris;
+										if ($new_pengasaldo<0) {
+											throw new Exception("pengarsaldo error");
+										}
+										$new_quantity = $info[$index][2];
+										$update_historik_query = "UPDATE historik SET quantity = ".$new_quantity." WHERE Transaktion_ID='".$info[$index][0]."' AND Produkt_ID = ".$produkt_id;
+										$update_konto_query = "UPDATE konto SET Saldo = ".$new_pengasaldo." WHERE Person_ID = ".$user_id;
+										$update_produkt_query = "UPDATE produkt SET Saldo = ".$new_lagersaldo." WHERE Produkt_ID = ".$produkt_id;
+										print_r($update_historik_query);
 										echo "<br>";
-										if (!$conn->query($msg_query)) {
-											throw new Exception("update status message error");
+										//print_r($update_produkt_query);
+										if (!$conn->query($update_historik_query) || !$conn->query($update_konto_query) || !$conn->query($update_produkt_query)) {
+											throw new Exception("update historik row error");
 										}
 									}
-									$index--;
+									$index++;
 								}
+								$result = $conn->query($historik_query);
+								$index=0;
 								$conn->commit();
 							}
 							catch (Exception $e) {
@@ -169,8 +190,14 @@ session_start();
 								echo '<div id="positiontext">
 						            <h1>Kontakt</h1>
 						            <p>Nå oss på telefon mellan tiderna 10-16 på veckodagar via numret:  1111111111. <br>Det går även att kontakta oss via e-mail: snus@experten.se.</p>
-						        </div>';
+						        	</div>';
 							}
+						}
+						else {
+							echo '<div id="positiontext">
+					            <h1>Kontakt</h1>
+					            <p>Nå oss på telefon mellan tiderna 10-16 på veckodagar via numret:  1111111111. <br>Det går även att kontakta oss via e-mail: snus@experten.se.</p>
+					        	</div>';
 						}
 					?>
 				</form>
