@@ -6,7 +6,10 @@
 		 // hämta relevant all produkt info
 		
    		$q=Outputproducts($sql_query5,$p);
-  echo '</div><div id= "allakommentarer">';
+  echo '</div><div id= "allakommentarer">
+    <div id="prodImg">
+      <img src="bilder/'."$a".'" id="produkten">
+    </div>'; 
    		if($q != null) 
    		{	 
         
@@ -42,7 +45,7 @@
 if(isset($_GET["kommentarstatus"]) && $_GET["kommentarstatus"] == "kommentarredigera" && $IDkom ==$_GET["KomID"])
   { 
   $swap='<form action="produkter.php" method="get" id="usrform"><textarea id="redigeratextbox" rows="4" cols="45" name="uppdatecomment" form="usrform" >'.$c.'</textarea>
-  <textarea class="hidden" rows="4" cols="50" name="KomID90" form="usrform">'.$IDkom.'</textarea><br><br>
+        <textarea class="hidden" rows="4" cols="50" name="KomID90" form="usrform">'.$IDkom.'</textarea>
   <input type="submit" id="redigeraknapp"> 
   <a href="produkter.php?produkt='.$s.'">
        <input type="button" id="cancel" value="Avbryt" />

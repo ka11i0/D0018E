@@ -326,9 +326,6 @@ if(isset($_GET['produkt']))
 
 				<button type="submit">Lägg till i kundkorg</button>
 			</form>
-		</div>		
-		<div id="prodImg">
-			<img src="bilder/'."$a".'" id="produkten">
 		</div>';
     include_once 'kommentarer.php';
     } 
