@@ -30,8 +30,7 @@
                 {print "href='kontosida.php' id='user'";}
             else
                 {print "href=login.php";} 
-            ?> class="right" style="
-    width: 100px;">
+            ?> class="right" style="width: 130px;">
         <?php //När ingen användare är inloggad så finns en länk till inlogg sidan
             if (isset($_SESSION["user"])) {
                 print_r($_SESSION["user"]);
