@@ -9,10 +9,12 @@
 #kolumn {
     width: 30%;
     margin: 30px 30px;
+    margin-right: 0px; 
 }
 #kolumn2 {
     width: 70%;
     margin: 30px 30px;
+    margin-left: 0px; 
 }
 
 #headline {
@@ -23,10 +25,9 @@
 #scroll{
   height: 430px;
   overflow: auto;
-  border: 1px solid black;
 }
 
-form {
+form#update {
     width: 310px;
     border: none;
 }
@@ -55,13 +56,13 @@ button:hover {
 }
 table{
   border-collapse: collapse;
+  border-spacing: 0px;
   margin: auto;
   text-align: left;
-  width: 700px;
+  width: 100%;
 }
 th {
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+
 }
 tr.bottom {
   border-bottom: 1px solid black;

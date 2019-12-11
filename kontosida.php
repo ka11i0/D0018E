@@ -50,7 +50,7 @@
         <div id="box">
         <?php
             $conn = OpenCon();
-            printUppdateraForm($_SESSION["id"], $conn, "post");
+            printUppdateraForm($_SESSION["id"], $conn, 1);
             printHistorik($_SESSION["id"], $conn);
             CloseCon($conn);
         ?>

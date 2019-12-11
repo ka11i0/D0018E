@@ -48,7 +48,9 @@ elseif (isset($_POST["bekrafta"])) {
 	$hist_id = nextHistId($conn);
 	$date = date("Y-m-d");
 	$time = date("H:i:s");
-	$nytt_saldo = $_SESSION["saldo"];
+	$saldo_query = "SELECT Saldo FROM konto WHERE Person_ID = ".$person_id;
+	$result = $conn->query($saldo_query)->fetch_assoc();
+	$nytt_saldo = $result["Saldo"];
 	$information_query = "SELECT varukorg.Produkt_ID, varukorg.quantity, produkt.Saldo, produkt.Pris FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
 	try{
 		$conn->begin_transaction();

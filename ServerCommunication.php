@@ -81,22 +81,26 @@ function printHistorik($user_id, $conn){
 	$name_query = "SELECT Namn FROM konto WHERE Person_ID='$user_id'";
 	$result = $conn->query($name_query)->fetch_assoc();
 	$namn = $result["Namn"];
-	$table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, produkt.Produktnamn, produkt.Pris FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$user_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
+	$table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, historik.status, produkt.Produktnamn, produkt.Pris FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$user_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
 	$result = $conn->query($table_query);
 	$index = 0;
 	echo '<div id="kolumn2">
     <p id="headline"><h3>Köp historik för '.$namn.'</h3></p>
     <div id="scroll">';
 	if ($result->num_rows>0) {
+		if ($_SESSION["privilegie"]==1) {
+			echo "<form method='post' width='100%'>";
+		}
 		echo "<table>
 		<thead>
-		<tr id='title' class='bottom'>
+		<tr id='title' style='background-color:SlateBlue;'>
 		<th>Namn</th>
 		<th>Antal (st)</th>
 		<th>Pris per enhet (kr)</th>
 		<th>Totalkostnad (kr)</th>
 		<th>Datum</th>
 		<th>Klockslag</th>
+		<th>Status</th>
 		</tr>
 		</thead>";
 		echo "<tbody>";
@@ -107,6 +111,7 @@ function printHistorik($user_id, $conn){
 	        $query_data[$index][3] = $row["quantity"];
 	        $query_data[$index][4] = $row["Datum"];
 	        $query_data[$index][5] = $row["Tid"];
+	        $query_data[$index][6] = $row["status"];
 	        $index++;
 	    }
 	}
@@ -115,39 +120,75 @@ function printHistorik($user_id, $conn){
 	}
 	$current_queue = NULL;
 	$count = 0;
+	$color = "powderblue";
 	for ($i=0; $i < $index; $i++) {
 	    if ($current_queue == $query_data[$i][0]) {
 	        $count++;
-	        echo "<tr>";
+	        echo '<tr style="background-color:'.$color.';">';
 		}
 	    else {
+	    	if ($color == "powderblue") {
+            	$color = "DodgerBlue";
+	        }
+            else {
+            	$color = "powderblue";
+	        }
 	        $count = 0;
-	            $current_queue = $query_data[$i][0];
-	            echo "<tr class='top'>";
+	        $current_queue = $query_data[$i][0];
+	        echo '<tr style="background-color:'.$color.';">';
 	    }
 	    echo "<th>".$query_data[$i][1]."</th>";
-	    echo "<th>".$query_data[$i][3]."</th>";
+	    if ($_SESSION["privilegie"]==1) {
+	    	echo "<th><input min='0' type='number' style='padding: 0px;width:50px;' value='".$query_data[$i][3]."' name='".$query_data[$i][0]."__".$query_data[$i][1]."'></th>";
+	    }
+	    else {
+	    	echo "<th>".$query_data[$i][3]."</th>";
+	    }
 	    echo "<th>".$query_data[$i][2]."</th>";
 	    echo "<th>".$query_data[$i][2]*$query_data[$i][3]."</th>";
 	    if ($count==0 || $count<1) {
 	        echo "<th>".$query_data[$i][4]."</th>";
 	        echo "<th>".$query_data[$i][5]."</th>";
+	        if ($_SESSION["privilegie"]==1 && $query_data[$i][6]=="incomplete") {
+	        	echo "<th>";
+	        	echo "<select name='status[]'>";
+	        	echo "<option value='incomplete'>incomplete</option>";
+	        	echo "<option value='complete'>complete</option>";
+	        	echo "</select>";
+	        	echo "</th>";
+	        }
+	        elseif ($_SESSION["privilegie"]==1 && $query_data[$i][6]=="complete") {
+	        	echo "<th>";
+	        	echo "<select name='status[]'>";
+	        	echo "<option value='complete'>complete</option>";
+	        	echo "<option value='incomplete'>incomplete</option>";
+	        	echo "</select>";
+	        	echo "</th>";
+	        }
+	    	else {
+	    		echo "<th>".$query_data[$i][6]."</th>";
+	    	}
 	    }
 	    else {
+	    	echo "<th></th>";
 	    	echo "<th></th>";
 	    	echo "<th></th>";
 	    }
 	    echo "</tr>";
 	}
         echo "</tbody></table>";
-		echo "</div>";
+        echo "</div>";
+        if ($_SESSION["privilegie"]==1) {
+        	echo '<button type="submit" name="UppdateraHist" value="'.$user_id.'">Uppdatera historik</button>';
+			echo "</form>";
+		}
 		echo "</div>";
 }
-function printUppdateraForm($user_id, $conn, $method) {
+function printUppdateraForm($user_id, $conn, $nmr) {
 	$user_query = "SELECT * FROM konto WHERE Person_ID='$user_id'";
 	$result = $conn->query($user_query)->fetch_assoc();
 	echo '<div id="kolumn">
-        <form method="'.$method.'">
+        <form method="post" id="update">
             <p id="headline"><h3>Kontouppgifter för '.$result["Namn"].'</h3></p>
                 <label for="email"><b>Email</b></label>
                 <input type="email" value="'.$result["Mail"].'" name="mail" required>
@@ -177,7 +218,10 @@ function printUppdateraForm($user_id, $conn, $method) {
                 <input type="text" value="'.$result["Lösenord"].'" name="password" required>
                 </div>
                 <input type="hidden" value="'.$result["Person_ID"].'" name="id">
-                <button type="submit" name="uppdatera">Uppdatera</button>
-            </form>
+                <button type="submit" name="uppdatera">Uppdatera kontoinformation</button>';
+                if ($nmr == 2) {
+                	echo '<button type="submit" name="tillbaka">Tillbaka</button>';
+                }
+            echo '</form>
 	    </div>';
 }

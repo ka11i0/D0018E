@@ -5,9 +5,7 @@
         <?php
             //ifall användare med admin privilegier är inloggad så kan man komma åt support sidan
             if (isset($_SESSION["user"])) {
-                if ($_SESSION["privilegie"]==1) {
-                    echo '<li><a href="support.php" class="left">Support</a></li>';
-                }
+                echo '<li><a href="support.php" class="left">Support</a></li>';
             }
         ?>
         <li><a href="om.php" class="left">Om oss</a></li>
@@ -27,7 +25,7 @@
             if (isset($_SESSION["user"])) 
                 {print "href='kontosida.php' id='user'";}
             else
-                {print "'href=login.php'";} 
+                {print "href=login.php";} 
             ?> class="right">
         <?php //När ingen användare är inloggad så finns en länk till inlogg sidan
             if (isset($_SESSION["user"])) {
