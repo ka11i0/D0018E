@@ -51,6 +51,7 @@ if (CheckPOST($info1)) {
 }
 CloseCon($p);
 }  
+
 function uppdaterakommentarer(){
 $p=OpenCon(); 
 if (isset($_GET['comment'])) {
@@ -79,6 +80,7 @@ if (isset($_GET['comment'])) {
 }
 CloseCon($p);
 }
+
 function uppdaterarating(){
 $p=OpenCon(); 
 if (isset($_GET['rate'])) {
@@ -108,6 +110,37 @@ if (isset($_GET['rate'])) {
 CloseCon($p);
 }
 
+function Tabortochredigerakommentar()
+{
+$p=OpenCon(); 
+
+ 
+if(isset($_GET['kommentarstatus']) && $_GET['kommentarstatus'] == "kommentarbort")
+  {
+    $åäöm =$_GET['KomID'];   
+    $squery = "DELETE FROM `kommentarer` WHERE `kommentarer`.`Kommentar_ID` ='{$åäöm}' ";
+    $p->query($squery);
+    $äöå=$_GET['produkt'];
+    header('Location: produkter.php?produkt='."$äöå".''); 
+  }
+  if(isset($_GET['uppdatecomment']) )
+  {
+     $nytext =$_GET['uppdatecomment'];  
+     $KOMID3 =$_GET['KomID90'];  
+     echo "$KOMID3";
+     $squery = "UPDATE `kommentarer` SET `kommentar` = '{$nytext}',`Datum` = CURRENT_DATE() WHERE `kommentarer`.`Kommentar_ID` = '{$KOMID3}'";
+     $p->query($squery);
+     $äöå=$_GET['produkt'];
+     header('Location: produkter.php?produkt='."$äöå".''); 
+  }
+
+
+
+
+
+
+CloseCon($p);
+}
 
 function tabortprodukt(){
 $p=OpenCon();
@@ -152,7 +185,7 @@ if(CheckPOST($info))
 }
 CloseCon($p);
 }
-
+Tabortochredigerakommentar();
 hanteravarukorg();
 uppdaterakommentarer();
 uppdaterarating();
@@ -300,7 +333,6 @@ if(isset($_GET['produkt']))
     include_once 'kommentarer.php';
     } 
  ?>
-</div>
 </div>
 <?php 
   CloseCon($p);

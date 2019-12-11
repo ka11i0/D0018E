@@ -61,16 +61,15 @@ a.right{
 	height: 60px;
 }
 #produktlänkar{ 
-	float: left;
-	padding-left: 50px;
-	width:30%;
-	height:40%;
+	position:absolute;
+	left:3%;
+	width:20%;
+	height:20%;
 }
 #bildotext{	
-	float: left;
-	padding-right: 300px;
-	padding-left: 70px;
-	width:50%;
+	position:absolute;
+	left:30%;
+	width:60%;
 	height:40%;
 }
 form#kop{
@@ -78,10 +77,14 @@ form#kop{
 	height 200px;
 }
 #omProdukt{
- 	float:right;
- 	width:20%;
-	height:100%;
-	padding-top:30px; 
+ 	position:absolute;
+ 	width:40%;
+	height:40%;
+	top:20%;
+	left:70%;
+	font-size: 20px;
+	font-family: Noto Sans, sans-serif;
+	font-weight: 300;
 
 }
 #prodImg{
@@ -89,19 +92,16 @@ form#kop{
 	width:35%;
 	height:40%;
 	margin-bottom:3%;
-	margin-left:3%;
+	margin-left:10%;
 
 }
-#nykommentar{
-	float:left;
 
-}
 div.namnicon{
 	float:left;
     vertical-align: top;
     display: inline-block;
-    text-align: center;
-    margin-right: 3px;
+    margin-right:3px;
+    
 }
 	
 
@@ -110,11 +110,9 @@ div.namnicon{
 }
 .caption {
     display: block;
+    text-align: center;
 }
-#Endakommentar{
-	float:left;
-	
-}
+
 .textkommentar{
 	border:1px solid grey;
 	width:362px;
@@ -122,21 +120,21 @@ div.namnicon{
 	padding-left: 5px;
 	float:left;
 	background: white;
-	margin-right: 500px;
+	
 }
 #submitknapp{
 position:relative;
 right:41px;
-top:18px;
+top:23px;
 }
 .hidden{
 	display: none;
 }
 #datum{
   position: relative;
-  top:30px;
+  top:26px;
   text-align: right;
-  margin-right: 5px;
+  margin-right: 2px;
   font-size: 12px;
 }
 *{
@@ -146,7 +144,7 @@ top:18px;
 .rate {
     height: 46px;
     padding: 0 10px;
-    padding-right: 500px;
+
     float:right;
 }
 .rate:not(:checked) > input {
@@ -188,4 +186,32 @@ top:18px;
 }
 #produkten{
 width:80%;
+}
+#knappen7{
+  position: relative;
+  left:8px;
+  top:5px;
+}
+#knappen2{
+  position: relative;
+  top:8px;
+   left:8px
+}
+#edit{
+float:left;
+}
+#allakommentarer{
+	position:absolute;
+	top:43%;
+	width:30%;
+	left:30%;
+
+}
+.Endakommentar{
+	float:left;
+	margin-left:20%;
+}
+#nykommentar{
+	float:left;
+	margin-left:20% ;
 }
