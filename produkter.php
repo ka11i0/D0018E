@@ -191,6 +191,7 @@ if ($uploadOk == 0) {
 
 uploadfile();
 */
+
 hanteravarukorg();
 uppdaterakommentarer();
 uppdaterarating();
@@ -205,7 +206,31 @@ läggtillprodukt();
 </head>
 	<body>
 	<?php include_once 'navbar.php'; ?>
-	<div id="topPadding"></div>
+	<div id="topPadding">
+        <div id="searchruta">
+            <form action="produkter.php" method="GET">
+                <input type="searchtext" name="search" placeholder="Sök produkt..">
+                <button type="submit" class="button searchbutton"><i class="left">Sök</i></button>
+            </form> 
+            <?php
+                if(isset($_GET['search'])){
+                    if($_GET['search']=="") {
+                        goto ingetinput; 
+                    }
+                    $p=OpenCon();
+                    $search = $_GET['search'];
+                    $searchq = $p->query("SELECT Produktnamn FROM `produkt` WHERE Produktnamn LIKE '%$search%'");
+                    $row = $searchq->fetch_assoc();
+                    if($row["Produktnamn"]==""){
+                        echo "<script type='text/javascript'>alert('Vi kunde inte hitta det du letar efter ;(');</script>";
+                    } else  {
+                        $_GET['produkt'] = $row["Produktnamn"];
+                    }
+                    ingetinput:
+                }   
+                ?> 
+        </div>
+    </div>
 	<div id="main">
 	<div id="produktlänkar">
 	<?php 

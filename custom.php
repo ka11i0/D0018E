@@ -4,7 +4,6 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="produkter.css">
-	<link rel="stylesheet" type="text/css" href="login.css">
 </head>
 	<body>
 		<?php include_once 'navbar.php'; ?>
