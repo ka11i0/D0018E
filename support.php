@@ -66,10 +66,6 @@ session_start();
 									$seq = $result["COUNT(*)"];	
 								}	
 							}
-							for ($i=0; $i < $len; $i++) { 
-								print_r($info[$i][3]);
-								echo "<br>";
-							}
 							$historik_query = "SELECT * FROM historik WHERE Person_ID = ".$user_id;
 
 							$n_query = "SELECT COUNT(*) FROM historik WHERE Person_ID = ".$user_id;
@@ -102,15 +98,20 @@ session_start();
 										}
 
 									}
-									elseif ($row["quantity"]>$info[$index][2] && $row["quantity"]!=$info[$index][2]) {
+									elseif ($row["quantity"]>$info[$index][2]) {
 										//antal minskning, pengasaldo ökning + lagersaldo ökning
 										$new_lagersaldo = $row["quantity"] + $produkt_saldo - $info[$index][2];
 										$new_pengasaldo = ($row["quantity"] - $info[$index][2]) * $produkt_pris + $user_saldo;
-										$new_quantity = $row["quantity"] - $info[$index][2];
+										$new_quantity = $info[$index][2];
 										$update_historik_query = "UPDATE historik SET quantity = ".$new_quantity." WHERE Transaktion_ID='".$info[$index][0]."' AND Produkt_ID = ".$produkt_id;
 										$update_konto_query = "UPDATE konto SET Saldo = ".$new_pengasaldo." WHERE Person_ID = ".$user_id;
 										$update_produkt_query = "UPDATE produkt SET Saldo = ".$new_lagersaldo." WHERE Produkt_ID = ".$produkt_id;
-										if (!$conn->query($update_historik_query) || !$conn->query($update_konto_query) || !$conn->query($update_produkt_query)) {
+										print_r($update_historik_query);
+										echo "<br>";
+										//print_r($update_konto_query);
+										echo "<br>";
+										//print_r($update_produkt_query);
+										if (!$conn->query($update_historik_query)) {
 											throw new Exception("update historik row error");
 										}
 									}
@@ -133,7 +134,6 @@ session_start();
 								$conn->rollback();
 								echo "<script type='text/javascript'>alert('".$e->getMessage()."');</script>";
 							}
-							print_r($index);
 						}
 						elseif (isset($_POST["tillbaka"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
 							header('Location: support.php');
