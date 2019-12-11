@@ -7,7 +7,7 @@ form {
 
 input[type=text], input[type=password], input[type=email], 
 input[type=town], input[type=post], input[type=addr],
-input[type=telnum] {
+input[type=telnum], input[type=number] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
