@@ -15,6 +15,7 @@
 			$_SESSION["telnr"]=$s["Telefonnummer"];
 			$_SESSION["id"]=$s["Person_ID"];
 			$_SESSION["saldo"]=$s["Saldo"];
+			$_SESSION["privilegie"]=$s["Privilegie"];
 	 		header('Location: produkter.php'); 
 	    }
  		else 
@@ -28,7 +29,7 @@
     if(CheckPOST($info)){
 		$psw = $_POST['psw']; //ta bort
 		$uname = $_POST['uname'];
-    	$sql_query1 ="SELECT Person_ID, Namn,Lösenord,Mail,Stad,Postnummer,Address,Telefonnummer,Saldo FROM `konto` WHERE 
+    	$sql_query1 ="SELECT Person_ID, Namn,Lösenord,Privilegie,Mail,Stad,Postnummer,Address,Telefonnummer,Saldo FROM `konto` WHERE 
 		Namn='{$uname}' AND Lösenord='{$psw}'";
     	$p=OpenCon(); // skapar ett connection objekt
    		LoginStatus($sql_query1,$p);

@@ -1,8 +1,10 @@
-body{
+/*OVERALL TEMA*/
+body {
 	background-color: #DAFFF4;
 	font-family: calibri;
 	margin: 0px;
 }
+
 .img1
 {
   float:left;
@@ -12,54 +14,84 @@ body{
   width: 50px;
   height:50px;
 
+/*PROFILBILD*/
+.img1 {
+	float: left;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 5px;
+	width: 50px;
+	height: 50px;
 }
+
 .img1:hover {
-  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
-
+	box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
 }
 
-nav#navigation{
+/*NAVBAR + produktlista*/
+nav#navigation {
 	width: 100%;
 	height: 59px;
-	border-bottom: 1px solid black; 
+	border-bottom: 1px solid black;
 }
-ul{
+
+ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 }
-li a{
+
+li a {
 	display: block;
 	text-align: center;
 	padding: 20px 30px;
 }
-a, a:visited, a:link{
+
+a,
+a:visited,
+a:link {
 	text-decoration: none;
 	color: inherit;
 }
-a:hover{
+
+a:hover {
 	background-color: #86B3A5;
 }
-a.left{
+
+a.left {
 	float: left;
 }
-a.right{
+
+a.right {
 	float: right;
 }
-#prod1, #prod2, #prod3, #prod4{
+
+#prod1,
+#prod2,
+#prod3,
+#prod4 {
 	clear: both;
 	padding-left: 10px;
 }
 
-#prodList{
-	
+#prodList {
 	margin-left: 30px;
 	border-left: 1px solid black;
 }
-#topPadding{
+
+#produktlänkar {
+	float: left;
+	padding-left: 50px;
+	width: 30%;
+	height: 40%;
+}
+
+/*Toppadding + searchbar*/
+#topPadding {
 	width: 100%;
 	height: 60px;
 }
+
 #produktlänkar{ 
 	position:absolute;
 	left:3%;
@@ -74,11 +106,38 @@ a.right{
     left: 60%;
     width: 30%;
     height: 30%
+
+.searchbutton {
+	background-color: #86B3A5;
+	color: white;
+	padding: 13px;
+	border: none;
+	cursor: pointer;
+	width: 3%;
 }
-form#kop{
+.searchbutton:hover {
+	opacity: 0.8;
+}
+input[type=searchtext] {
+	width: 10%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+}
+#searchruta {
+	padding-left: 50px;
+	width: 100%;
+	height: auto;
+}
+
+
+form#kop {
 	width: 450px;
-	height 200px;
+	height: 200px;
 }
+
 #omProdukt{
  	position:absolute;
 	top:20%;
@@ -97,35 +156,39 @@ div.namnicon{
     vertical-align: top;
     display: inline-block;
     margin-right:3px;
-    
-}
-	
+ }   
 
-#kommetararea{
-	float:left;
+
+
+#kommetararea {
+	float: left;
 }
+
 .caption {
     display: block;
     text-align: center;
 }
 
-.textkommentar{
-	border:1px solid grey;
-	width:362px;
-	height:61px;
+.textkommentar {
+	border: 1px solid grey;
+	width: 362px;
+	height: 61px;
 	padding-left: 5px;
-	float:left;
+	float: left;
 	background: white;
 	
 }
+
 #submitknapp{
 position:relative;
 right:41px;
 top:23px;
 }
-.hidden{
+
+.hidden {
 	display: none;
 }
+
 #datum{
   position: relative;
   top:26px;
@@ -133,10 +196,12 @@ top:23px;
   margin-right: 2px;
   font-size: 12px;
 }
-*{
-    margin: 0;
-    padding: 0;
+
+* {
+	margin: 0;
+	padding: 0;
 }
+
 .rate {
     height: 46px;
     padding: 0 10px;

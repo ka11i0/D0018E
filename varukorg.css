@@ -3,11 +3,37 @@ table, tr, th{
 	border-collapse: collapse;
 	margin: auto;
 	text-align: left;
+	padding: 5px;
 }
 table{
-	width: 50%;
-	margin-top: 3%;
+	width: 94%;
 }
+
 #title{
 	font-size: 20px;
+}
+form {
+	width: 75%;
+	margin: auto;
+	padding-top: 2%;
+	background-color: #DDDDDD;
+}
+button {
+  background-color: #86B3A5;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 48.5%;
+  margin-left:1%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+th {
+	width: 25%;
+	border-left: 0px;
+	border-right: 0px;
 }

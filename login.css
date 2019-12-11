@@ -1,12 +1,16 @@
 form {
-    width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    border: none;
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
 }
 
-input[type=text], input[type=password], input[type=email], 
-input[type=town], input[type=post], input[type=addr],
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=town],
+input[type=post],
+input[type=addr],
 input[type=telnum] {
   width: 100%;
   padding: 12px 20px;
@@ -33,4 +37,3 @@ button:hover {
 .container {
   padding: 16px;
 }
-
