@@ -124,7 +124,7 @@ elseif (isset($_POST["bekrafta"])) {
 								<tr id='title'>
 								    <th>Namn</th>
 								    <th>Antal (st)</th>
-								    <th>Pris per enhet (kr)</th>
+								    <th>Ordinarie pris (kr)</th>
 								    <th>Rea</th>
 								    <th>Lagersaldo (st)</th>
 								</tr>";
@@ -139,13 +139,13 @@ elseif (isset($_POST["bekrafta"])) {
 		    			echo "<th>".$row["Pris"]."</th>";
 
 		    			echo "<th>";
-		    			echo "".$row["Saldo"]."";
+		    			if (isKampanj($row["Produkt_ID"],date("Y-m-d"))) {
+		    				echo currentKampanj($row["Produkt_ID"])."%";
+		    			}
 		    			echo "</th>";
 
 		    			echo "<th>";
-		    			if (isKampanj($row["Produkt_ID"],date("Y-m-d"))) {
-		    				$procent_query = "SELECT Procent FROM kampanj WHERE Produkt_ID='".$row["Produkt_ID"."'";
-		    			}
+		    			echo "".$row["Saldo"]."";
 		    			echo "</th>";
 
 		    			echo "</tr>";
@@ -153,7 +153,7 @@ elseif (isset($_POST["bekrafta"])) {
 		    		}
 		    		echo "<tr class='lastrow'>";
 		    		echo "<th colspan='2'>Total kostnad:</th>";
-		    		echo "<th colspan='2'>".$total_kostnad." kr</th>";
+		    		echo "<th colspan='3'>".$total_kostnad." kr</th>";
 		    		echo "</tr>";
 		    		echo "</table>";
 		    		echo "<button name='uppdatera'>Uppdatera kundkorg</button>";

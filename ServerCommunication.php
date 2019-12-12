@@ -232,6 +232,7 @@ function isKampanj ($Produkt_ID, $date) {
 	$query = "SELECT Start, Slut, Procent FROM kampanj WHERE Produkt_ID = '$Produkt_ID'";
 	$result = $conn->query($query);
 	$index = 0;
+	$info="";
 	while ($row = $result->fetch_assoc()) {
 		$info[$index]=explode("-", $row["Start"]);
 		$info[$index+1]=explode("-", $row["Slut"]);
