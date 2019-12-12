@@ -191,21 +191,26 @@ function hanterakampanj()
 {
 $p=OpenCon();
 $info = array('Produkter','reaprocent','Start','Slut');
-if(CheckPOST($info)){
+if(CheckPOST($info))
+	{
  	  $info[0] = $_POST['Produkter'];
  	  $nyid=nextKampanjId($p);
 	  $info[1] = $_POST['reaprocent'];
       $info[2] = $_POST['Start'];
 	  $info[3] = $_POST['Slut'];
-	  foreach($info[0] as $proddddu){
+	  foreach($info[0] as $proddddu)
+	  {
 	  	$nyid=nextKampanjId($p);
 	  	$sql22="SELECT Produkt_ID FROM produkt WHERE Produktnamn='$proddddu'";
 	  	$prod_result = $p->query($sql22)->fetch_assoc();
         $prodiddd = $prod_result["Produkt_ID"];
-	  	$sqlll="INSERT INTO `kampanj` (`Kampanj_ID`, `Produkt_ID`, `Procent`, `Start`, `Slut`) VALUES ('$nyid', '$prodiddd', '$info[1]', '$info[2]', '$info[3]');";
+        if(!(currentKampanj($prodiddd))){
+        $sqlll="INSERT INTO `kampanj` (`Kampanj_ID`, `Produkt_ID`, `Procent`, `Start`, `Slut`) VALUES ('$nyid', '$prodiddd', '$info[1]', '$info[2]', '$info[3]');";
 	  	$p->query($sqlll);
+	  	}
 	  }
-}
+	}
+
 CloseCon($p);
 }
 
