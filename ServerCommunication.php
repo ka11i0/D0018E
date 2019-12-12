@@ -232,22 +232,23 @@ function isKampanj ($Produkt_ID, $date) {
 	$query = "SELECT Start, Slut, Procent FROM kampanj WHERE Produkt_ID = '$Produkt_ID'";
 	$result = $conn->query($query);
 	$index = 0;
-	$info="";
 	while ($row = $result->fetch_assoc()) {
 		$info[$index]=explode("-", $row["Start"]);
 		$info[$index+1]=explode("-", $row["Slut"]);
 		$index = $index + 2;
 	}
 	$index = 0;
-	while ($index<count($info)) {
-		if ($info[$index][0]<=$date[0] && $date[0]<=$info[$index+1][0]) {
-			if ($info[$index][1]<=$date[1] && $date[1]<=$info[$index+1][1]) {
-				if ($info[$index][2]<=$date[2] && $date[2]<=$info[$index+1][2]) {
-					return TRUE;
+	if (isset($info)) {
+		while ($index<count($info)) {
+			if ($info[$index][0]<=$date[0] && $date[0]<=$info[$index+1][0]) {
+				if ($info[$index][1]<=$date[1] && $date[1]<=$info[$index+1][1]) {
+					if ($info[$index][2]<=$date[2] && $date[2]<=$info[$index+1][2]) {
+						return TRUE;
+					}
 				}
 			}
+			$index = $index + 2;
 		}
-		$index = $index + 2;
 	}
 	CloseCon($conn);
 	return FALSE;
@@ -258,7 +259,7 @@ function currentKampanj ($Produkt_ID) {
 	$query = "SELECT Start, Slut, Procent FROM kampanj WHERE Produkt_ID = '$Produkt_ID'";
 	$result = $conn->query($query);
 	$index = 0;
-	$info="";
+	$info;
 	while ($row = $result->fetch_assoc()) {
 		$info[$index]=explode("-", $row["Start"]);
 		$info[$index][3]=$row["Procent"];
@@ -266,15 +267,17 @@ function currentKampanj ($Produkt_ID) {
 		$index = $index + 2;
 	}
 	$index = 0;
-	while ($index<count($info)) {
-		if ($info[$index][0]<=$date[0] && $date[0]<=$info[$index+1][0]) {
-			if ($info[$index][1]<=$date[1] && $date[1]<=$info[$index+1][1]) {
-				if ($info[$index][2]<=$date[2] && $date[2]<=$info[$index+1][2]) {
-					return $info[$index][3];
+	if (isset($info)) {
+		while ($index<count($info)) {
+			if ($info[$index][0]<=$date[0] && $date[0]<=$info[$index+1][0]) {
+				if ($info[$index][1]<=$date[1] && $date[1]<=$info[$index+1][1]) {
+					if ($info[$index][2]<=$date[2] && $date[2]<=$info[$index+1][2]) {
+						return $info[$index][3];
+					}
 				}
 			}
+			$index = $index + 2;
 		}
-		$index = $index + 2;
 	}
 	CloseCon($conn);
 	return FALSE;
