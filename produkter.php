@@ -164,6 +164,10 @@ if(CheckPOST($info))
       $info[2] = $_POST['Pris'];
 	  $info[3] = $_POST['Saldo'];
 	  $info[4] = $_POST['Produktbeskrivning'];
+	  //$info[5] = $_POST['reaprocent'];
+	  if($info[5] > 100 || $info[5]<0){
+	  	$info[5]=0;
+	  }
 	  $val = $_POST['funk'];
 	  if($val == 1)
 	  {
@@ -177,7 +181,6 @@ if(CheckPOST($info))
   	  else
   	  {		
   	  		$id = $_POST['id'];
-  	  		echo "$id";
   	  		$squery = "UPDATE `produkt` SET `Produktnamn` = '$info[0]', `Img_filsökväg` = '$info[1]', `Pris` = '$info[2]', `Saldo` = '$info[3]', `Produktbeskrivning` = '$info[4]' WHERE `produkt`.`Produkt_ID` = '$id';";
   	  		$p->query($squery);
   	  		
@@ -201,33 +204,9 @@ läggtillochuppdateraprodukt();
 </head>
 	<body>
 	<?php include_once 'navbar.php'; ?>
-	<div id="topPadding">
-        <div id="searchruta">
-            <form action="produkter.php" method="GET">
-                <input type="searchtext" name="search" placeholder="Sök produkt..">
-                <button type="submit" class="button searchbutton"><i class="left">Sök</i></button>
-            </form> 
-            <?php
-                if(isset($_GET['search'])){
-                    if($_GET['search']=="") {
-                        goto ingetinput; 
-                    }
-                    $p=OpenCon();
-                    $search = $_GET['search'];
-                    $searchq = $p->query("SELECT Produktnamn FROM `produkt` WHERE Produktnamn LIKE '%$search%'");
-                    $row = $searchq->fetch_assoc();
-                    if($row["Produktnamn"]==""){
-                        echo "<script type='text/javascript'>alert('Vi kunde inte hitta det du letar efter ;(');</script>";
-                    } else  {
-                        $_GET['produkt'] = $row["Produktnamn"];
-                    }
-                    ingetinput:
-                }   
-                ?> 
-        </div>
-    </div>
+	<div id="topPadding"></div>
 	<div id="main">
-	<div id="produktlänkar">
+	<div id="produktlänkar"><h id="varulista">Varulista</h><br><br>
 	<?php 
 		$p=OpenCon();
 		$sql_query1 ="SELECT * FROM `produkt`"; // hämta all produkt info
@@ -243,6 +222,11 @@ läggtillochuppdateraprodukt();
    		  		$b=$row["Pris"];
    		 	    $c=$row["Saldo"];
    		  		$d=$row["Produktbeskrivning"];
+   		  		$procent=10;
+   		  		$reainfo="";
+   		  		if($procent != 0){
+   		  			$reainfo=''."$procent".'% REA JUST NU &darr;';
+   		  		}
    				$allID[]=$id;
    				$x="";
    				
@@ -265,7 +249,7 @@ läggtillochuppdateraprodukt();
 						<button type="submit">Uppdatera</button>
 					 </form>'; //lägg till här
    				}
-   				echo '<a href="produkter.php?produkt='."$s".'">'."$s".'</a> &nbsp;'."$x".'<br><br>'; //kanske ta bort space och ha produktbild istället
+   				echo '<div class="reatext">'."$reainfo".'</div><a class="produktinf" href="produkter.php?produkt='."$s".'">'."$s".'</a> '."$x".'<br><br>'; //kanske ta bort space och ha produktbild istället
    			}
 
    		}
@@ -333,6 +317,7 @@ if(isset($_GET['produkt']))
    		  $c=$row["Saldo"];
    		  $d=$row["Produktbeskrivning"];
           $f=$row["Produkt_ID"];
+         // $procent=$row["reaprocent"];
           $res = $p->query($sql_query9)->fetch_assoc();
           $z=$res["AVG"];
           if($z==null){

@@ -76,12 +76,13 @@ a.right {
 
 #produktlänkar{ 
 	position:absolute;
-	left:3%;
-	width:20%;
+	left:2%;
+	width:25%;
 	height:20%;
-	font-size: 24px;
+	font-size: 20px;
 	font-family: Noto Sans, sans-serif;
 	font-weight: 300;
+	
 }
 #bildotext{	
 	position: absolute;
@@ -268,12 +269,20 @@ float:left;
     left: 282px;
     margin-bottom: 5px;
 }
-a.small {
-	padding:0px;
-	padding-left:2px;
-	margin:0px;
-	display:inline;
+.reatext{
+
+	font-size: 12px;
 }
-a:hover.small {
-	background-color:inherit;
+.produktinf{
+
+}
+.helaaa{
+	position:relative;
+	left:27%;
+}
+#varulista{
+	position:relative;
+	left:1%;
+	text-decoration: underline;
+	font-size: 30px;
 }
