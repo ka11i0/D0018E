@@ -89,8 +89,6 @@ session_start();
 										$message = $info[$index][3];
 										$tran_id = $info[$index][0];
 										$msg_query = "UPDATE historik SET status = '$message' WHERE Transaktion_ID='$tran_id' AND Produkt_ID = '$produkt_id'";
-										print_r($msg_query);
-										echo "<br>";
 										if (!$conn->query($msg_query)) {
 											throw new Exception("update status message error");
 										}
@@ -98,28 +96,33 @@ session_start();
 									if ($info[$index][2]==0) {
 										//refund, pengasaldo ökning + lagersaldo ökning
 										$new_lagersaldo = $row["quantity"] + $produkt_saldo;
-										$new_pengasaldo = $row["quantity"] * $produkt_pris + $user_saldo;
+										if (isKampanj($produkt_id, $row["Datum"])) {
+											$new_pengasaldo = round($row["quantity"] * $produkt_pris * (1-getKampanj($produkt_id, $row["Datum"])*0.01),0) + $user_saldo;
+										}
+										else {
+											$new_pengasaldo = $row["quantity"] * $produkt_pris + $user_saldo;
+										}
 										$delete_query = "DELETE FROM historik WHERE Transaktion_ID='".$info[$index][0]."' AND Produkt_ID = ".$produkt_id;
 										$update_konto_query = "UPDATE konto SET Saldo = ".$new_pengasaldo." WHERE Person_ID = ".$user_id;
 										$update_produkt_query = "UPDATE produkt SET Saldo = ".$new_lagersaldo." WHERE Produkt_ID = ".$produkt_id;
 										if (!$conn->query($delete_query) || !$conn->query($update_konto_query) || !$conn->query($update_produkt_query)) {
 											throw new Exception("remove historik row error");
 										}
-										print_r($delete_query);
-										echo "<br>";
 
 									}
 									elseif ($row["quantity"]>$info[$index][2]) {
 										//antal minskning, pengasaldo ökning + lagersaldo ökning
 										$new_lagersaldo = $row["quantity"] + $produkt_saldo - $info[$index][2];
-										$new_pengasaldo = ($row["quantity"] - $info[$index][2]) * $produkt_pris + $user_saldo;
+										if (isKampanj($produkt_id, $row["Datum"])) {
+											$new_pengasaldo = round(($row["quantity"] - $info[$index][2]) * $produkt_pris * (1-getKampanj($produkt_id, $row["Datum"])*0.01),0) + $user_saldo;
+										}
+										else {
+											$new_pengasaldo = ($row["quantity"] - $info[$index][2]) * $produkt_pris + $user_saldo;
+										}
 										$new_quantity = $info[$index][2];
 										$update_historik_query = "UPDATE historik SET quantity = ".$new_quantity." WHERE Transaktion_ID='".$info[$index][0]."' AND Produkt_ID = ".$produkt_id;
 										$update_konto_query = "UPDATE konto SET Saldo = ".$new_pengasaldo." WHERE Person_ID = ".$user_id;
 										$update_produkt_query = "UPDATE produkt SET Saldo = ".$new_lagersaldo." WHERE Produkt_ID = ".$produkt_id;
-										print_r($update_historik_query);
-										echo "<br>";
-										//print_r($update_produkt_query);
 										if (!$conn->query($update_historik_query) || !$conn->query($update_konto_query) || !$conn->query($update_produkt_query)) {
 											throw new Exception("update historik row error");
 										}
@@ -130,7 +133,12 @@ session_start();
 										if ($new_lagersaldo<0) {
 											throw new Exception("lagersaldo error");
 										}
-										$new_pengasaldo = $user_saldo - ($info[$index][2] - $row["quantity"]) * $produkt_pris;
+										if (isKampanj($produkt_id, $row["Datum"])) {
+											$new_pengasaldo = $user_saldo - round(($info[$index][2] - $row["quantity"]) * $produkt_pris *(1-getKampanj($produkt_id, $row["Datum"])*0.01),0);
+										}
+										else {
+											$new_pengasaldo = $user_saldo - ($info[$index][2] - $row["quantity"]) * $produkt_pris;
+										}
 										if ($new_pengasaldo<0) {
 											throw new Exception("pengarsaldo error");
 										}
@@ -138,9 +146,6 @@ session_start();
 										$update_historik_query = "UPDATE historik SET quantity = ".$new_quantity." WHERE Transaktion_ID='".$info[$index][0]."' AND Produkt_ID = ".$produkt_id;
 										$update_konto_query = "UPDATE konto SET Saldo = ".$new_pengasaldo." WHERE Person_ID = ".$user_id;
 										$update_produkt_query = "UPDATE produkt SET Saldo = ".$new_lagersaldo." WHERE Produkt_ID = ".$produkt_id;
-										print_r($update_historik_query);
-										echo "<br>";
-										//print_r($update_produkt_query);
 										if (!$conn->query($update_historik_query) || !$conn->query($update_konto_query) || !$conn->query($update_produkt_query)) {
 											throw new Exception("update historik row error");
 										}
@@ -155,6 +160,8 @@ session_start();
 								$conn->rollback();
 								echo "<script type='text/javascript'>alert('".$e->getMessage()."');</script>";
 							}
+							CloseCon($conn);
+							header('Location: support.php?Person_ID='.$user_id.'');
 						}
 						elseif (isset($_POST["tillbaka"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
 							header('Location: support.php');
