@@ -268,3 +268,12 @@ float:left;
     left: 282px;
     margin-bottom: 5px;
 }
+a.small {
+	padding:0px;
+	padding-left:2px;
+	margin:0px;
+	display:inline;
+}
+a:hover.small {
+	background-color:inherit;
+}
