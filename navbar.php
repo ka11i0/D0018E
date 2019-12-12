@@ -1,4 +1,5 @@
 <script type="text/javascript">
+    //function showResult kod tagen från https://www.w3schools.com/php/php_ajax_livesearch.asp
     function showResult(str) {
         if (str.length==0) {
             document.getElementById("livesearch").innerHTML="";

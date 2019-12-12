@@ -236,7 +236,7 @@ function printUppdateraForm($user_id, $conn, $nmr) {
             echo '</form>
 	    </div>';
 }
-
+//returnerar om för varan $Produkt_ID vid datum $date denna var i kampanj
 function isKampanj ($Produkt_ID, $date) {
 	$conn = OpenCon();
 	$date = explode("-", $date);
@@ -264,6 +264,7 @@ function isKampanj ($Produkt_ID, $date) {
 	CloseCon($conn);
 	return FALSE;
 }
+//returnerar procent satsen i form av ett heltal för varan $Produkt_ID vid datumet just nu
 function currentKampanj ($Produkt_ID) {
 	$conn = OpenCon();
 	$date = explode("-", date("Y-m-d"));
@@ -293,6 +294,7 @@ function currentKampanj ($Produkt_ID) {
 	CloseCon($conn);
 	return FALSE;
 }
+//returnerar procent satsen i form av ett heltal för varan $Produkt_ID vid datumet $date
 function getKampanj ($Produkt_ID, $date) {
 	$conn = OpenCon();
 	$date = explode("-", $date);

@@ -61,6 +61,7 @@ elseif (isset($_POST["bekrafta"])) {
 				$Produkt_ID = $row["Produkt_ID"];
 				$quant = $row["quantity"];
 				//nytt kontosaldo för kontot
+				//ifall det är rea på varan så måste reafaktorn räknas ut och multipliceras in
 				if (isKampanj($Produkt_ID, date("Y-m-d"))) {
 					$nytt_saldo = $nytt_saldo - round($row["Pris"] * $row["quantity"] * (1 - currentKampanj($Produkt_ID)*0.01),0);
 				}
@@ -119,11 +120,13 @@ elseif (isset($_POST["bekrafta"])) {
 <body>
 	<?php include_once 'navbar.php'; ?>
 			<?php
+				//Ta fram all data till tabellen
 				$total_kostnad = 0;
 				$table_query = "SELECT varukorg.quantity, produkt.Produkt_ID, produkt.Produktnamn, produkt.Pris, produkt.Saldo FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
 				$conn = OpenCon();
 				$result = $conn->query($table_query);
 				if ($result->num_rows>0) {
+					//skrivut headern av tabellen
 					echo "<form method='post'>
 							<table>
 								<tr id='title'>
@@ -134,6 +137,7 @@ elseif (isset($_POST["bekrafta"])) {
 								    <th>Lagersaldo (st)</th>
 								</tr>";
 					while($row = $result->fetch_assoc()) {
+						//skrivut bodyn av tabellen
 						echo "<tr>";
 		    			echo "<th>".$row["Produktnamn"]."</th>";
 
@@ -161,6 +165,7 @@ elseif (isset($_POST["bekrafta"])) {
 		    			echo "</tr>";
 
 		    		}
+		    		//i sista raden så skrivs totalkostnaden för köpet ut
 		    		echo "<tr class='lastrow'>";
 		    		echo "<th colspan='2'>Total kostnad:</th>";
 		    		echo "<th colspan='3'>".$total_kostnad." kr</th>";
@@ -171,6 +176,7 @@ elseif (isset($_POST["bekrafta"])) {
 		    		echo "</form>";
 		    		CloseCon($conn);
 		    	}
+		    	//om det inte finns nåt i varukorgen
 		    	else {
 		    		echo "<h3 style='text-align:center'>Börja handla för att saker ska visas här.</h3>";
 		    	}
