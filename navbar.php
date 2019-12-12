@@ -25,7 +25,6 @@
 <nav id="navigation">
     <ul>
         <li><a href="produkter.php" class="left">Butik</a></li>
-        <li><a href="custom.php" class="left">Custom Snus</a></li>
         <?php
         echo '<li><a href="support.php" class="left">Support</a></li>';
         ?>
