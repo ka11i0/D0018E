@@ -226,9 +226,9 @@ function printUppdateraForm($user_id, $conn, $nmr) {
 	    </div>';
 }
 
-function isKampanj ($Produkt_ID) {
+function isKampanj ($Produkt_ID, $date) {
 	$conn = OpenCon();
-	$date = explode("-", date("Y-m-d"));
+	$date = explode("-", $date);
 	$query = "SELECT Start, Slut FROM kampanj WHERE Produkt_ID = '$Produkt_ID'";
 	$result = $conn->query($query);
 	$index = 0;
@@ -248,6 +248,6 @@ function isKampanj ($Produkt_ID) {
 		}
 		$index = $index + 2;
 	}
+	CloseCon($conn);
 	return FALSE;
-
 }

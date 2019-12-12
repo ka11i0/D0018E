@@ -9,7 +9,7 @@ include 'ServerCommunication.php';
 </head>
 <body>
 <?php
-	if (isKampanj("1")) {
+	if (isKampanj("1","2019-12-24")) {
 		echo "yeboi";
 	}
 	else {
