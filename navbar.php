@@ -1,27 +1,4 @@
 <script type="text/javascript">
-    var username;
-    var monies;
-
-    document.getElementById("user").onmouseover = function() {mouseOverKonto()};
-    document.getElementById("user").onmouseout = function() {mouseOutKonto()};
-    document.getElementById("saldo").onmouseover = function() {mouseOverSaldo()};
-    document.getElementById("saldo").onmouseout = function() {mouseOutSaldo()};
-
-    function mouseOverKonto() {
-        username = document.getElementById("user").innerHTML;
-        document.getElementById("user").innerHTML = "kontosida";
-    }
-    function mouseOutKonto() {
-        document.getElementById("user").innerHTML = username;
-    }
-    function mouseOverSaldo() {
-        monies = document.getElementById("saldo").innerHTML;
-        document.getElementById("saldo").innerHTML = "Klicka för påfyllning.";
-    }
-    function mouseOutSaldo() {
-        document.getElementById("saldo").innerHTML = monies;
-    }
-    //-------------------------------------------
     function showResult(str) {
         if (str.length==0) {
             document.getElementById("livesearch").innerHTML="";
@@ -77,8 +54,7 @@
         //inloggade användare har också tillgång till sitt saldo
         if (isset($_SESSION["user"])) {
             if ($_SESSION["privilegie"]==0) {
-                echo '<li><a class="right" id="saldo" href="saldo.php" style="
-                        width: 140px;">'.$_SESSION["saldo"].' kr</a></li>';
+                echo '<li><a class="right" id="saldo" href="saldo.php">'.$_SESSION["saldo"].' kr</a></li>';
             }
         }
         ?>
@@ -88,7 +64,7 @@
                 {print "href='kontosida.php' id='user'";}
             else
                 {print "href=login.php";} 
-            ?> class="right" style="width: 130px;">
+            ?> class="right">
         <?php //När ingen användare är inloggad så finns en länk till inlogg sidan
             if (isset($_SESSION["user"])) {
                 print_r($_SESSION["user"]);

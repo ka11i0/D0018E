@@ -60,9 +60,14 @@ elseif (isset($_POST["bekrafta"])) {
 			if ($row["Saldo"]>=$row["quantity"]) {
 				$Produkt_ID = $row["Produkt_ID"];
 				$quant = $row["quantity"];
-				//nytt konto saldo för kontot
-				$nytt_saldo = $nytt_saldo - $row["Pris"] * $row["quantity"];
-				//nytt lager saldo för produkten
+				//nytt kontosaldo för kontot
+				if (isKampanj($Produkt_ID, date("Y-m-d"))) {
+					$nytt_saldo = $nytt_saldo - round($row["Pris"] * $row["quantity"] * (1 - currentKampanj($Produkt_ID)*0.01),0);
+				}
+				else {
+					$nytt_saldo = $nytt_saldo - $row["Pris"] * $row["quantity"];
+				}
+				//nytt lagersaldo för produkten
 				$new_saldo = $row["Saldo"] - $quant;
 				$purchase_query = "INSERT INTO historik (Transaktion_ID, Person_ID, Datum, Tid, Produkt_ID, quantity) VALUES ('$hist_id', '$person_id','$date', '$time','$Produkt_ID', '$quant')";
 				$delete_varukorg_query = "DELETE FROM varukorg WHERE Person_ID = '$person_id' AND Produkt_ID = '$Produkt_ID'";
@@ -140,7 +145,12 @@ elseif (isset($_POST["bekrafta"])) {
 
 		    			echo "<th>";
 		    			if (isKampanj($row["Produkt_ID"],date("Y-m-d"))) {
+		    				$total_kostnad += round($row["quantity"]*$row["Pris"]*(1-currentKampanj($row["Produkt_ID"])*0.01), 0);
 		    				echo currentKampanj($row["Produkt_ID"])."%";
+		    			}
+		    			else {
+		    				$total_kostnad += $row["quantity"]*$row["Pris"];
+		    				echo "0%";
 		    			}
 		    			echo "</th>";
 
@@ -149,7 +159,7 @@ elseif (isset($_POST["bekrafta"])) {
 		    			echo "</th>";
 
 		    			echo "</tr>";
-		    			$total_kostnad += $row["quantity"]*$row["Pris"];
+
 		    		}
 		    		echo "<tr class='lastrow'>";
 		    		echo "<th colspan='2'>Total kostnad:</th>";

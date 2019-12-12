@@ -9,7 +9,7 @@ include 'ServerCommunication.php';
 </head>
 <body>
 <?php
-	print_r(currentKampanj("1"));
+	var_dump( 10 - round((1 - currentKampanj("2")*0.01)*5, 0)  );
 ?>
 </body>
 </html>

@@ -81,7 +81,7 @@ function printHistorik($user_id, $conn){
 	$name_query = "SELECT Namn FROM konto WHERE Person_ID='$user_id'";
 	$result = $conn->query($name_query)->fetch_assoc();
 	$namn = $result["Namn"];
-	$table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, historik.status, produkt.Produktnamn, produkt.Pris FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$user_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
+	$table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, historik.status, produkt.Produkt_ID,produkt.Produktnamn, produkt.Pris FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$user_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
 	$result = $conn->query($table_query);
 	$index = 0;
 	echo '<div id="kolumn2">
@@ -97,6 +97,7 @@ function printHistorik($user_id, $conn){
 		<th>Namn</th>
 		<th>Antal (st)</th>
 		<th>Pris per enhet (kr)</th>
+		<th>Rea</th>
 		<th>Totalkostnad (kr)</th>
 		<th>Datum</th>
 		<th>Klockslag</th>
@@ -112,6 +113,7 @@ function printHistorik($user_id, $conn){
 	        $query_data[$index][4] = $row["Datum"];
 	        $query_data[$index][5] = $row["Tid"];
 	        $query_data[$index][6] = $row["status"];
+	        $query_data[$index][7] = $row["Produkt_ID"];
 	        $index++;
 	    }
 	}
@@ -145,7 +147,16 @@ function printHistorik($user_id, $conn){
 	    	echo "<th>".$query_data[$i][3]."</th>";
 	    }
 	    echo "<th>".$query_data[$i][2]."</th>";
-	    echo "<th>".$query_data[$i][2]*$query_data[$i][3]."</th>";
+
+	    if (isKampanj($query_data[$i][7],$query_data[$i][4])) {
+	    	echo "<th>".getKampanj($query_data[$i][7],$query_data[$i][4])."% </th>";
+	    	echo "<th>".round($query_data[$i][2]*$query_data[$i][3]*(1-getKampanj($query_data[$i][7],$query_data[$i][4])*0.01),0)."</th>";
+	    }
+	    else {
+	    	echo "<th>0%</th>";
+	    	echo "<th>".$query_data[$i][2]*$query_data[$i][3]."</th>";
+	    }
+
 	    if ($count==0 || $count<1) {
 	        echo "<th>".$query_data[$i][4]."</th>";
 	        echo "<th>".$query_data[$i][5]."</th>";
@@ -256,6 +267,35 @@ function isKampanj ($Produkt_ID, $date) {
 function currentKampanj ($Produkt_ID) {
 	$conn = OpenCon();
 	$date = explode("-", date("Y-m-d"));
+	$query = "SELECT Start, Slut, Procent FROM kampanj WHERE Produkt_ID = '$Produkt_ID'";
+	$result = $conn->query($query);
+	$index = 0;
+	$info;
+	while ($row = $result->fetch_assoc()) {
+		$info[$index]=explode("-", $row["Start"]);
+		$info[$index][3]=$row["Procent"];
+		$info[$index+1]=explode("-", $row["Slut"]);
+		$index = $index + 2;
+	}
+	$index = 0;
+	if (isset($info)) {
+		while ($index<count($info)) {
+			if ($info[$index][0]<=$date[0] && $date[0]<=$info[$index+1][0]) {
+				if ($info[$index][1]<=$date[1] && $date[1]<=$info[$index+1][1]) {
+					if ($info[$index][2]<=$date[2] && $date[2]<=$info[$index+1][2]) {
+						return $info[$index][3];
+					}
+				}
+			}
+			$index = $index + 2;
+		}
+	}
+	CloseCon($conn);
+	return FALSE;
+}
+function getKampanj ($Produkt_ID, $date) {
+	$conn = OpenCon();
+	$date = explode("-", $date);
 	$query = "SELECT Start, Slut, Procent FROM kampanj WHERE Produkt_ID = '$Produkt_ID'";
 	$result = $conn->query($query);
 	$index = 0;
