@@ -258,6 +258,7 @@ function currentKampanj ($Produkt_ID) {
 	$query = "SELECT Start, Slut, Procent FROM kampanj WHERE Produkt_ID = '$Produkt_ID'";
 	$result = $conn->query($query);
 	$index = 0;
+	$info="";
 	while ($row = $result->fetch_assoc()) {
 		$info[$index]=explode("-", $row["Start"]);
 		$info[$index][3]=$row["Procent"];
