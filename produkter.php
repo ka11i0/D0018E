@@ -164,11 +164,16 @@ if(CheckPOST($info))
       $info[2] = $_POST['Pris'];
 	  $info[3] = $_POST['Saldo'];
 	  $info[4] = $_POST['Produktbeskrivning'];
+	  $info[5] = $_POST['reaprocent'];
+	  if($info[5] > 100 || $info[5]<0){
+	  	$info[5]=0;
+	  	echo 'woof';
+	  }
 	  $val = $_POST['funk'];
 	  if($val == 1)
 	  {
 		  $id = nextprodId($p);
-	      $squery = "INSERT INTO produkt(Produktnamn,Produkt_ID,Img_filsökväg,Pris,Saldo,Produktbeskrivning) VALUES ('$info[0]','$id','$info[1]','$info[2]','$info[3]','$info[4]')";
+	      $squery = "INSERT INTO produkt(Produktnamn,Produkt_ID,Img_filsökväg,Pris,Saldo,Produktbeskrivning,reaprocent) VALUES ('$info[0]','$id','$info[1]','$info[2]','$info[3]','$info[4]','$info[5]')";
 		   if(!($p->query($squery)))
 		   	{
 	      		echo "<script type='text/javascript'>alert('kan inte läggas till då produkten redan finns uppdatera den istället');</script>";
@@ -177,8 +182,7 @@ if(CheckPOST($info))
   	  else
   	  {		
   	  		$id = $_POST['id'];
-  	  		echo "$id";
-  	  		$squery = "UPDATE `produkt` SET `Produktnamn` = '$info[0]', `Img_filsökväg` = '$info[1]', `Pris` = '$info[2]', `Saldo` = '$info[3]', `Produktbeskrivning` = '$info[4]' WHERE `produkt`.`Produkt_ID` = '$id';";
+  	  		$squery = "UPDATE `produkt` SET `Produktnamn` = '$info[0]', `Img_filsökväg` = '$info[1]', `Pris` = '$info[2]', `Saldo` = '$info[3]', `Produktbeskrivning` = '$info[4]',`reaprocent`='$info[5]' WHERE `produkt`.`Produkt_ID` = '$id';";
   	  		$p->query($squery);
   	  		
   	  }
@@ -227,7 +231,7 @@ läggtillochuppdateraprodukt();
         </div>
     </div>
 	<div id="main">
-	<div id="produktlänkar">
+	<div id="produktlänkar"><h id="varulista">Varulista</h><br><br>
 	<?php 
 		$p=OpenCon();
 		$sql_query1 ="SELECT * FROM `produkt`"; // hämta all produkt info
@@ -243,6 +247,11 @@ läggtillochuppdateraprodukt();
    		  		$b=$row["Pris"];
    		 	    $c=$row["Saldo"];
    		  		$d=$row["Produktbeskrivning"];
+   		  		$procent=$row["reaprocent"];
+   		  		$reainfo="";
+   		  		if($procent != 0){
+   		  			$reainfo=''."$procent".'% REA JUST NU &#8594;';
+   		  		}
    				$allID[]=$id;
    				$x="";
    				
@@ -260,12 +269,14 @@ läggtillochuppdateraprodukt();
 						<input type="text" Value="'."$c".'" name="Saldo" required><br>
 						<label for="x"><b>Produktbeskrivning</b></label>
 						<input type="text" Value="'."$d".'" name="Produktbeskrivning" required><br>
+						<label for="x"><b>Reaprocent</b></label>
+						<input type="text" Value="'."$procent".'" name="reaprocent" ><br>
 						<input type="funktion" class="hidden" name="funk" value="2" />
 						<input type="IDEntit" class="hidden" name="id" value="'."$id".'" />
 						<button type="submit">Uppdatera</button>
 					 </form>'; //lägg till här
    				}
-   				echo '<a href="produkter.php?produkt='."$s".'">'."$s".'</a> &nbsp;'."$x".'<br><br>'; //kanske ta bort space och ha produktbild istället
+   				echo '<div class="reatext">'."$reainfo".'</div><a class="produktinf" href="produkter.php?produkt='."$s".'">'."$s".'</a> '."$x".'<br><br>'; //kanske ta bort space och ha produktbild istället
    			}
 
    		}
@@ -282,6 +293,8 @@ läggtillochuppdateraprodukt();
 	<input type="text" placeholder="Saldo" name="Saldo" required><br>
 	<label for="x"><b>Produktbeskrivning</b></label>
 	<input type="text" placeholder="beskriv produkten" name="Produktbeskrivning" required><br>
+	<label for="x"><b>Reaprocent</b></label>
+	<input type="text" value="0" name="reaprocent" required><br>
 	<input type="funktion" class="hidden" name="funk" value="1" />
 	<button type="submit">Lägg till</button>
  </form>	
@@ -333,6 +346,7 @@ if(isset($_GET['produkt']))
    		  $c=$row["Saldo"];
    		  $d=$row["Produktbeskrivning"];
           $f=$row["Produkt_ID"];
+          $procent=$row["reaprocent"];
           $res = $p->query($sql_query9)->fetch_assoc();
           $z=$res["AVG"];
           if($z==null){
