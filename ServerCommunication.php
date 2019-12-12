@@ -224,15 +224,30 @@ function printUppdateraForm($user_id, $conn, $nmr) {
                 }
             echo '</form>
 	    </div>';
-	}
+}
 
-	function isKampanj ($Produkt_ID) {
-		$conn = OpenCon();
-		$konto_query = "SELECT Datum FROM konto WHERE Produkt_ID='$Produkt_ID'";
-		$result = $conn->query($konto_query);
-		$result = $result->fetch_assoc();
-		$dateProd = $result["Datum"];
-
-		$info = explode("-", $dateProd);
-		print_r($info);
+function isKampanj ($Produkt_ID) {
+	$conn = OpenCon();
+	$date = explode("-", date("Y-m-d"));
+	$query = "SELECT Start, Slut FROM kampanj WHERE Produkt_ID = '$Produkt_ID'";
+	$result = $conn->query($query);
+	$index = 0;
+	while ($row = $result->fetch_assoc()) {
+		$info[$index]=explode("-", $row["Start"]);
+		$info[$index+1]=explode("-", $row["Slut"]);
+		$index = $index + 2;
 	}
+	$index = 0;
+	while ($index<count($info)) {
+		if ($info[$index][0]<=$date[0] && $date[0]<=$info[$index+1][0]) {
+			if ($info[$index][1]<=$date[1] && $date[1]<=$info[$index+1][1]) {
+				if ($info[$index][2]<=$date[2] && $date[2]<=$info[$index+1][2]) {
+					return TRUE;
+				}
+			}
+		}
+		$index = $index + 2;
+	}
+	return FALSE;
+
+}
