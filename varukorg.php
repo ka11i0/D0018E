@@ -115,7 +115,7 @@ elseif (isset($_POST["bekrafta"])) {
 	<?php include_once 'navbar.php'; ?>
 			<?php
 				$total_kostnad = 0;
-				$table_query = "SELECT varukorg.quantity, produkt.Produktnamn, produkt.Pris, produkt.Saldo FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
+				$table_query = "SELECT varukorg.quantity, produkt.Produkt_ID, produkt.Produktnamn, produkt.Pris, produkt.Saldo FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
 				$conn = OpenCon();
 				$result = $conn->query($table_query);
 				if ($result->num_rows>0) {
@@ -125,6 +125,7 @@ elseif (isset($_POST["bekrafta"])) {
 								    <th>Namn</th>
 								    <th>Antal (st)</th>
 								    <th>Pris per enhet (kr)</th>
+								    <th>Rea</th>
 								    <th>Lagersaldo (st)</th>
 								</tr>";
 					while($row = $result->fetch_assoc()) {
@@ -139,6 +140,12 @@ elseif (isset($_POST["bekrafta"])) {
 
 		    			echo "<th>";
 		    			echo "".$row["Saldo"]."";
+		    			echo "</th>";
+
+		    			echo "<th>";
+		    			if (isKampanj($row["Produkt_ID"],date("Y-m-d"))) {
+		    				$procent_query = "SELECT Procent FROM kampanj WHERE Produkt_ID='".$row["Produkt_ID"."'";
+		    			}
 		    			echo "</th>";
 
 		    			echo "</tr>";
