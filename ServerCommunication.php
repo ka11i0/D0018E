@@ -224,4 +224,15 @@ function printUppdateraForm($user_id, $conn, $nmr) {
                 }
             echo '</form>
 	    </div>';
-}
+	}
+
+	function isKampanj ($Produkt_ID) {
+		$conn = OpenCon();
+		$konto_query = "SELECT Datum FROM konto WHERE Produkt_ID='$Produkt_ID'";
+		$result = $conn->query($konto_query);
+		$result = $result->fetch_assoc();
+		$dateProd = $result["Datum"];
+
+		$info = explode("-", $dateProd);
+		print_r($info);
+	}

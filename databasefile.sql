@@ -63,3 +63,14 @@ CREATE TABLE rating
 			FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
 			PRIMARY KEY(Person_ID,Produkt_ID)
 );
+
+CREATE TABLE kampanj
+	(
+	Kampanj_ID INT(10) NOT NULL, 
+	Produkt_ID INT(10) NOT NULL,
+	Procent INT(10) NOT NULL,
+	Start DATE NOT NULL, 
+	Slut DATE NOT NULL, 
+	FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
+	PRIMARY KEY(Kampanj_ID)
+);
