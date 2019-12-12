@@ -72,5 +72,5 @@ CREATE TABLE kampanj
 	Start DATE NOT NULL, 
 	Slut DATE NOT NULL, 
 	FOREIGN KEY(Produkt_ID) REFERENCES produkt(Produkt_ID) ON DELETE CASCADE,
-	PRIMARY KEY(Kampanj_ID)
+	PRIMARY KEY(Kampanj_ID,Produkt_ID)
 );

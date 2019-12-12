@@ -133,12 +133,6 @@ if(isset($_GET['kommentarstatus']) && $_GET['kommentarstatus'] == "kommentarbort
      $äöå=$_GET['produkt'];
      header('Location: produkter.php?produkt='."$äöå".''); 
   }
-
-
-
-
-
-
 CloseCon($p);
 }
 
@@ -156,7 +150,7 @@ CloseCon($p);
 }
 function läggtillochuppdateraprodukt(){
 $p=OpenCon();
-$info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning','funk');
+$info = array('Produktnamn','Img_filsökväg','Pris','Saldo','Produktbeskrivning','funk',);
 if(CheckPOST($info))
 {	  
 	  $info[0] = $_POST['Produktnamn'];
@@ -164,10 +158,6 @@ if(CheckPOST($info))
       $info[2] = $_POST['Pris'];
 	  $info[3] = $_POST['Saldo'];
 	  $info[4] = $_POST['Produktbeskrivning'];
-	  //$info[5] = $_POST['reaprocent'];
-	  if($info[5] > 100 || $info[5]<0){
-	  	$info[5]=0;
-	  }
 	  $val = $_POST['funk'];
 	  if($val == 1)
 	  {
@@ -183,12 +173,43 @@ if(CheckPOST($info))
   	  		$id = $_POST['id'];
   	  		$squery = "UPDATE `produkt` SET `Produktnamn` = '$info[0]', `Img_filsökväg` = '$info[1]', `Pris` = '$info[2]', `Saldo` = '$info[3]', `Produktbeskrivning` = '$info[4]' WHERE `produkt`.`Produkt_ID` = '$id';";
   	  		$p->query($squery);
-  	  		
+  	  		$procent3 = $_POST['reaprocent'];			 	
   	  }
 }
 CloseCon($p);
 }
 
+function nextKampanjId($p){
+  $id_query = "SELECT MAX(Kampanj_ID) FROM kampanj";
+  $result = $p->query($id_query)->fetch_assoc();
+  if ($result['MAX(Kampanj_ID)'] !=NULL) {
+  	return $result['MAX(Kampanj_ID)'] + 1;
+  }
+  return 0;
+}
+function hanterakampanj()
+{
+$p=OpenCon();
+$info = array('Produkter','reaprocent','Start','Slut');
+if(CheckPOST($info)){
+ 	  $info[0] = $_POST['Produkter'];
+ 	  $nyid=nextKampanjId($p);
+	  $info[1] = $_POST['reaprocent'];
+      $info[2] = $_POST['Start'];
+	  $info[3] = $_POST['Slut'];
+	  foreach($info[0] as $proddddu){
+	  	$nyid=nextKampanjId($p);
+	  	$sql22="SELECT Produkt_ID FROM produkt WHERE Produktnamn='$proddddu'";
+	  	$prod_result = $p->query($sql22)->fetch_assoc();
+        $prodiddd = $prod_result["Produkt_ID"];
+	  	$sqlll="INSERT INTO `kampanj` (`Kampanj_ID`, `Produkt_ID`, `Procent`, `Start`, `Slut`) VALUES ('$nyid', '$prodiddd', '$info[1]', '$info[2]', '$info[3]');";
+	  	$p->query($sqlll);
+	  }
+}
+CloseCon($p);
+}
+
+hanterakampanj();
 Tabortochredigerakommentar();
 hanteravarukorg();
 uppdaterakommentarer();
@@ -211,7 +232,8 @@ läggtillochuppdateraprodukt();
 		$p=OpenCon();
 		$sql_query1 ="SELECT * FROM `produkt`"; // hämta all produkt info
    		$q=Outputproducts($sql_query1,$p);
-   		$allID = array("toggla");
+   		$allID = array("toggla","toggla87");
+   		$allaproduktnamn=array();
    		if($q != null) 
    		{	
    			while($row = $q->fetch_assoc())
@@ -222,14 +244,15 @@ läggtillochuppdateraprodukt();
    		  		$b=$row["Pris"];
    		 	    $c=$row["Saldo"];
    		  		$d=$row["Produktbeskrivning"];
-   		  		$procent=10;
    		  		$reainfo="";
-   		  		if($procent != 0){
+   		  		$procent="";
+   		  		if(currentKampanj($id)){
+   		  			$procent=currentKampanj($id);
    		  			$reainfo=''."$procent".'% REA JUST NU &darr;';
    		  		}
    				$allID[]=$id;
+   				$allaproduktnamn[]=$s;
    				$x="";
-   				
    				if($admin){
    					$x='<a href="produkter.php?uppdatera='."$s".'"><button>Ta bort</button></a>
    					<button onclick="updateform('."$id".')"type="button" id="toggla3">Uppdatera</button>
@@ -247,7 +270,7 @@ läggtillochuppdateraprodukt();
 						<input type="funktion" class="hidden" name="funk" value="2" />
 						<input type="IDEntit" class="hidden" name="id" value="'."$id".'" />
 						<button type="submit">Uppdatera</button>
-					 </form>'; //lägg till här
+					 </form>'; 
    				}
    				echo '<div class="reatext">'."$reainfo".'</div><a class="produktinf" href="produkter.php?produkt='."$s".'">'."$s".'</a> '."$x".'<br><br>'; //kanske ta bort space och ha produktbild istället
    			}
@@ -268,10 +291,26 @@ läggtillochuppdateraprodukt();
 	<input type="text" placeholder="beskriv produkten" name="Produktbeskrivning" required><br>
 	<input type="funktion" class="hidden" name="funk" value="1" />
 	<button type="submit">Lägg till</button>
- </form>	
+ </form>
+
+<button onclick="updateform('toggla87')"type="button" id="toggla4"> NyKampanj</button>
+	 <form id="toggla87" action="produkter.php" method="post" enctype="multipart/form-data" style="display:none;"><br>
+		<label for="x"><b>Välj produkter</b></label> 
+	    <select name="Produkter[]" multiple="multiple">
+	    	<?php foreach ( $allaproduktnamn as $tgg){
+		echo '<option value="'."$tgg".'">'."$tgg".'</option>';} ?>
+		</select><br>
+		<label for="x"><b>Reaprocentsats</b></label>
+		 <input type="text" placeholder="XX%"  name="reaprocent"><br>
+		<label for="start">Startdatum:</label>
+		 <input type="date" id="start" name="Start"placeholder="yyyy-mm-dd"min="<?php $gggg=date("Y-m-d"); echo "$gggg"; ?>" max="<?php echo date('Y-m-d', strtotime(' + 7 days')) ?>"required><br>	
+		<label for="x"><b>Slutdatum:</b></label>
+		 <input type="date" id="start" name="Slut" placeholder="yyyy-mm-dd" min="<?php echo date('Y-m-d', strtotime(' + 7 days')) ?>" max="<?php echo date('Y-m-d', strtotime(' + 30 days')) ?>" required><br>
+		<button type="submit">Skapa</button>
+	 </form>	
 </div>
 <script> document.getElementById("toggla").style.display = "none"</script>
-
+<script> document.getElementById("toggla87").style.display = "none"</script>
 <div id="bildotext">
 <script>
 function updateform(which) 
@@ -299,6 +338,7 @@ for(var i=0;i<IDs.length;i++)
 if(!$admin)
 	{
 		echo '<script> document.getElementById("toggla2").style.display = "none" </script>';
+		echo '<script> document.getElementById("toggla4").style.display = "none" </script>';
     } 	
 
 
@@ -317,7 +357,13 @@ if(isset($_GET['produkt']))
    		  $c=$row["Saldo"];
    		  $d=$row["Produktbeskrivning"];
           $f=$row["Produkt_ID"];
-         // $procent=$row["reaprocent"];
+          $text4 = 'Pris: $'."$b".'.0';
+          if(currentKampanj($f))
+          {
+   		  		$procent2=currentKampanj($f);
+   		  		$nypris= $b - ($b * 0.01 * $procent2); 
+   		  		$text4 = 'Ordinarie Pris: $'."$b".' Reapris: $'."$nypris".'';
+   		  }
           $res = $p->query($sql_query9)->fetch_assoc();
           $z=$res["AVG"];
           if($z==null){
@@ -325,8 +371,8 @@ if(isset($_GET['produkt']))
           }
    		  $z=round($z);
 
-   		  echo '<div id="omProdukt">'."$s".'<br><br>
-			Pris: $'."$b".'.0<br><br>
+   		  echo '<div id="omProdukt">'."$s".'<br><br>'."$text4".'
+			<br><br>
 			I lager: '."$c".' St<br><br>
 			'."$d".'<br><br> <div id="star">★</div><div id="grade">'."$z".'/5 betygsatt av '."$antal".' personer</div><br><br>
 			<form id="kop" method="post">
