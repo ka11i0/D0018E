@@ -1,0 +1,2 @@
+arctext.js, ref:tympanus.net, available under MIT licens
+search bar, https://www.w3schools.com/php/php_ajax_livesearch.asp
