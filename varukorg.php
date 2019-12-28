@@ -11,7 +11,7 @@ if (isset($_POST["uppdatera"])) {
 		$index++;
 	}
 	//ta fram quantity i varukorg för att se om ändringar ska utföras
-	$name_query = "SELECT varukorg.Produkt_ID, varukorg.quantity FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
+	$name_query = "SELECT varukorg.Produkt_ID, varukorg.quantity, varukorg.snapshot FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
 	$result = $conn->query($name_query);
 	$index = 0;
 	while($row=$result->fetch_assoc()) {
