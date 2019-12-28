@@ -23,9 +23,10 @@ if (CheckPOST($info1)) {
         $quant = $_POST['amount'];
         $user_id = $_SESSION["id"];
         //översätta produkt namn till dess id
-        $prod_query = "SELECT Produkt_ID FROM produkt WHERE Produktnamn='$prod'";
+        $prod_query = "SELECT Produkt_ID, Pris FROM produkt WHERE Produktnamn='$prod'";
         $prod_result = $p->query($prod_query)->fetch_assoc();
         $prod = $prod_result["Produkt_ID"];
+        $kostnad = $prod_result["Pris"];
         //få fram om produkten redan finns i varukorg tabellen
         $quant_query = "SELECT quantity FROM varukorg WHERE Person_ID='$user_id' AND Produkt_ID='$prod'";
         $quant_result = $p->query($quant_query);
@@ -36,7 +37,7 @@ if (CheckPOST($info1)) {
             $varukorg_query = "UPDATE varukorg SET quantity = '$quant' WHERE Person_ID = '$user_id' AND Produkt_ID = '$prod'";
         }
         else{
-            $varukorg_query = "INSERT INTO varukorg (Person_ID, Produkt_ID, quantity) VALUES ('$user_id', '$prod', '$quant')";
+            $varukorg_query = "INSERT INTO varukorg (Person_ID, Produkt_ID, quantity, snapshot) VALUES ('$user_id', '$prod', '$quant', '$kostnad')";
         }
         if ($p->query($varukorg_query)){
                 echo "<script type='text/javascript'>alert('Vald vara finns nu i din varukorg.');</script>";

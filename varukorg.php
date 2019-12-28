@@ -51,7 +51,7 @@ elseif (isset($_POST["bekrafta"])) {
 	$saldo_query = "SELECT Saldo FROM konto WHERE Person_ID = ".$person_id;
 	$result = $conn->query($saldo_query)->fetch_assoc();
 	$nytt_saldo = $result["Saldo"];
-	$information_query = "SELECT varukorg.Produkt_ID, varukorg.quantity, produkt.Saldo, produkt.Pris FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
+	$information_query = "SELECT varukorg.Produkt_ID, varukorg.quantity, varukorg.snapshot,produkt.Saldo FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
 	try{
 		$conn->begin_transaction();
 		$result = $conn->query($information_query);
@@ -63,14 +63,15 @@ elseif (isset($_POST["bekrafta"])) {
 				//nytt kontosaldo för kontot
 				//ifall det är rea på varan så måste reafaktorn räknas ut och multipliceras in
 				if (isKampanj($Produkt_ID, date("Y-m-d"))) {
-					$nytt_saldo = $nytt_saldo - round($row["Pris"] * $row["quantity"] * (1 - currentKampanj($Produkt_ID)*0.01),0);
+					$nytt_saldo = $nytt_saldo - round($row["snapshot"] * $row["quantity"] * (1 - currentKampanj($Produkt_ID)*0.01),0);
 				}
 				else {
-					$nytt_saldo = $nytt_saldo - $row["Pris"] * $row["quantity"];
+					$nytt_saldo = $nytt_saldo - $row["snapshot"] * $row["quantity"];
 				}
 				//nytt lagersaldo för produkten
 				$new_saldo = $row["Saldo"] - $quant;
-				$purchase_query = "INSERT INTO historik (Transaktion_ID, Person_ID, Datum, Tid, Produkt_ID, quantity) VALUES ('$hist_id', '$person_id','$date', '$time','$Produkt_ID', '$quant')";
+				$snapshot_pris = $row["snapshot"];
+				$purchase_query = "INSERT INTO historik (Transaktion_ID, Person_ID, Datum, Tid, Produkt_ID, quantity, snapshot) VALUES ('$hist_id', '$person_id','$date', '$time','$Produkt_ID', '$quant', '$snapshot_pris')";
 				$delete_varukorg_query = "DELETE FROM varukorg WHERE Person_ID = '$person_id' AND Produkt_ID = '$Produkt_ID'";
 				$update_saldo_query = "UPDATE produkt SET saldo = '$new_saldo' WHERE Produkt_ID = '$Produkt_ID'";
 				$update_pengar_query = "UPDATE konto SET Saldo = '$nytt_saldo' WHERE Person_ID = '$person_id'";
@@ -122,7 +123,7 @@ elseif (isset($_POST["bekrafta"])) {
 			<?php
 				//Ta fram all data till tabellen
 				$total_kostnad = 0;
-				$table_query = "SELECT varukorg.quantity, produkt.Produkt_ID, produkt.Produktnamn, produkt.Pris, produkt.Saldo FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
+				$table_query = "SELECT varukorg.quantity, produkt.Produkt_ID, produkt.Produktnamn, varukorg.snapshot, produkt.Saldo FROM varukorg INNER JOIN produkt ON varukorg.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$person_id' ORDER BY produkt.Produkt_ID ASC";
 				$conn = OpenCon();
 				$result = $conn->query($table_query);
 				if ($result->num_rows>0) {
@@ -132,7 +133,7 @@ elseif (isset($_POST["bekrafta"])) {
 								<tr id='title'>
 								    <th>Namn</th>
 								    <th>Antal (st)</th>
-								    <th>Ordinarie pris (kr)</th>
+								    <th>Ordinarie Pris (kr)</th>
 								    <th>Rea</th>
 								    <th>Lagersaldo (st)</th>
 								</tr>";
@@ -145,15 +146,15 @@ elseif (isset($_POST["bekrafta"])) {
 		    			echo "<input type='number' name='".$row["Produktnamn"]."' value='".$row["quantity"]."' min='0'>";
 		    			echo "</th>";
 
-		    			echo "<th>".$row["Pris"]."</th>";
+		    			echo "<th>".$row["snapshot"]."</th>";
 
 		    			echo "<th>";
 		    			if (isKampanj($row["Produkt_ID"],date("Y-m-d"))) {
-		    				$total_kostnad += round($row["quantity"]*$row["Pris"]*(1-currentKampanj($row["Produkt_ID"])*0.01), 0);
+		    				$total_kostnad += round($row["quantity"]*$row["snapshot"]*(1-currentKampanj($row["Produkt_ID"])*0.01), 0);
 		    				echo currentKampanj($row["Produkt_ID"])."%";
 		    			}
 		    			else {
-		    				$total_kostnad += $row["quantity"]*$row["Pris"];
+		    				$total_kostnad += $row["quantity"]*$row["snapshot"];
 		    				echo "0%";
 		    			}
 		    			echo "</th>";

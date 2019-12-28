@@ -93,7 +93,7 @@ session_start();
 									$produkt_query = "SELECT * FROM produkt WHERE Produktnamn = '".$info[$index][1]."'";
 									$produkt_result=$conn->query($produkt_query)->fetch_assoc();
 									$produkt_saldo = $produkt_result["Saldo"];
-									$produkt_pris = $produkt_result["Pris"];
+									$produkt_pris = $row["snapshot"];
 									$produkt_id = $produkt_result["Produkt_ID"];
 									//om status meddelandet skiljer sig från det på databasen så ska den ändras
 									if ($row["status"]!=$info[$index][3]){

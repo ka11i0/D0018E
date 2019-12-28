@@ -81,7 +81,7 @@ function printHistorik($user_id, $conn){
 	$name_query = "SELECT Namn FROM konto WHERE Person_ID='$user_id'";
 	$result = $conn->query($name_query)->fetch_assoc();
 	$namn = $result["Namn"];
-	$table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, historik.status, produkt.Produkt_ID,produkt.Produktnamn, produkt.Pris FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$user_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
+	$table_query = "SELECT historik.Transaktion_ID, historik.Datum, historik.Tid, historik.quantity, historik.status, produkt.Produkt_ID,produkt.Produktnamn, historik.snapshot FROM historik INNER JOIN produkt ON historik.Produkt_ID = produkt.Produkt_ID WHERE Person_ID='$user_id' ORDER BY historik.Datum DESC, historik.tid DESC, produkt.Produkt_ID ASC";
 	$result = $conn->query($table_query);
 	$index = 0;
 	echo '<div id="kolumn2">
@@ -108,7 +108,7 @@ function printHistorik($user_id, $conn){
 		while($row = $result->fetch_assoc()) {
 	        $query_data[$index][0] = $row["Transaktion_ID"];
 	        $query_data[$index][1] = $row["Produktnamn"];
-	        $query_data[$index][2] = $row["Pris"];
+	        $query_data[$index][2] = $row["snapshot"];
 	        $query_data[$index][3] = $row["quantity"];
 	        $query_data[$index][4] = $row["Datum"];
 	        $query_data[$index][5] = $row["Tid"];
