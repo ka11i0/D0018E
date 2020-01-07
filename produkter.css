@@ -289,3 +289,9 @@ float:left;
 #toggla4{
 
 }
+.small {
+	display: inline;
+	text-align: left;
+	padding:0px;
+    padding-left: 13px;
+}
