@@ -54,12 +54,15 @@
         //inloggade användare har också tillgång till sitt saldo
         if (isset($_SESSION["user"])) {
             if ($_SESSION["privilegie"]==0) {
-                $user_id = $_SESSION["user"];
+                $conn = OpenCon();
+                $user_id = $_SESSION["id"];
                 $saldo_query = "SELECT Saldo FROM konto WHERE Person_ID = ".$user_id;
-                $result = $conn->query($saldo_query)->fetch_assoc();
+                $result = $conn->query($saldo_query);
+                $result = $result->fetch_assoc();
                 $saldo = $result["Saldo"];
                 $_SESSION["saldo"] = $saldo;
                 echo '<li><a class="right" id="saldo" href="saldo.php">'.$_SESSION["saldo"].' kr</a></li>';
+                CloseCon($conn);
             }
         }
         ?>
